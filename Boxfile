@@ -4,7 +4,7 @@ global:
     - PIECRUST_ENV: production
 web1:
   name: bulletphp
-  index_list: [index.php]
+  index_list: [index.html, index.php]
   document_root: /www-bulletphp/_counter/
   php_version: 5.3.10
   php_extensions:
