@@ -1,0 +1,9 @@
+---
+title: Bullet Blog
+layout: blog
+format: none
+---
+
+{% for post in pagination.posts %}
+  {% include 'partial_post.html' %}
+{% endfor %}

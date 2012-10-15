@@ -1,0 +1,16 @@
+global:
+  php_date_timezone: "UTC"
+  env:
+    - PIECRUST_ENV: production
+web1:
+  name: bulletphp
+  index_list: [index.php]
+  document_root: /www-bulletphp/_counter/
+  php_version: 5.3.10
+  php_extensions:
+    - apc
+    - curl
+    - intl
+    - mbstring
+    - mcrypt
+    - memcached
