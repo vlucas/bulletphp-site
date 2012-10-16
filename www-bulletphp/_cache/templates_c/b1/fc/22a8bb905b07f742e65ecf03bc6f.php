@@ -77,12 +77,12 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
         echo "\">Home</a></li>
                 <li><a href=\"";
         // line 26
-        echo twig_escape_filter($this->env, $this->env->getExtension('piecrust')->getUrl("blog"), "html", null, true);
-        echo "\">Blog</a></li>
+        echo twig_escape_filter($this->env, $this->env->getExtension('piecrust')->getUrl("docs"), "html", null, true);
+        echo "\">Documentation</a></li>
                 <li><a href=\"";
         // line 27
-        echo twig_escape_filter($this->env, $this->env->getExtension('piecrust')->getUrl("about"), "html", null, true);
-        echo "\">About</a></li>
+        echo twig_escape_filter($this->env, $this->env->getExtension('piecrust')->getUrl("blog"), "html", null, true);
+        echo "\">Blog</a></li>
               </ul>
             </div>
           </div>
