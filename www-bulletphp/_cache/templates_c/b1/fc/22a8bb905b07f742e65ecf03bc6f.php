@@ -132,9 +132,8 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
 
     <!-- GA Tracker Code -->
     <script type=\"text/javascript\">
-
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '']);
+      _gaq.push(['_setAccount', 'UA-359731-31']);
       _gaq.push(['_setDomainName', 'bulletphp.com']);
       _gaq.push(['_trackPageview']);
 
@@ -143,11 +142,10 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
-
     </script>
 
 \t";
-        // line 98
+        // line 96
         if (isset($context["piecrust"])) { $_piecrust_ = $context["piecrust"]; } else { $_piecrust_ = null; }
         echo $this->getAttribute($_piecrust_, "debug_info");
         echo "
@@ -252,6 +250,6 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  222 => 6,  212 => 4,  208 => 3,  206 => 2,  193 => 1,  187 => 64,  184 => 63,  176 => 40,  173 => 39,  161 => 29,  158 => 28,  149 => 98,  116 => 67,  114 => 63,  99 => 52,  94 => 51,  89 => 50,  79 => 42,  77 => 39,  68 => 32,  66 => 28,  53 => 19,  48 => 18,  43 => 17,  38 => 16,  20 => 10,  55 => 9,  52 => 8,  44 => 7,  36 => 6,  29 => 4,  26 => 14,  17 => 1,);
+        return array (  220 => 6,  210 => 4,  206 => 3,  204 => 2,  191 => 1,  185 => 64,  182 => 63,  174 => 40,  171 => 39,  159 => 29,  156 => 28,  147 => 96,  116 => 67,  114 => 63,  99 => 52,  94 => 51,  89 => 50,  79 => 42,  77 => 39,  68 => 32,  66 => 28,  53 => 19,  48 => 18,  43 => 17,  38 => 16,  20 => 10,  55 => 9,  52 => 8,  44 => 7,  36 => 6,  29 => 4,  26 => 14,  17 => 1,);
     }
 }
