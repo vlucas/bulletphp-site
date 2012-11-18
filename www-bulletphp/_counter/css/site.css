@@ -8,10 +8,10 @@
 /* Override some defaults */
 html, body {
   font-family: 'Droid Sans', arial, sans-serif;
-  background-color: #eee;
+  background: #222 url(../img/debut_dark.png);
 }
 body {
-  padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+  padding: 30px 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -32,71 +32,35 @@ h3, h4 {
   padding: 0!important;
 }
 
-.container {
-  margin-bottom: 50px;
-}
-
-/* The white background content wrapper */
-#page_content {
-  background-color: #fff;
-  padding: 20px;
-  padding-bottom: 40px;
-  margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
-  -webkit-border-radius: 0 0 6px 6px;
-     -moz-border-radius: 0 0 6px 6px;
-          border-radius: 0 0 6px 6px;
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-          box-shadow: 0 1px 2px rgba(0,0,0,.15);
-}
-#page_main p {
-  font-size: 16px;
-  line-height: 1.5em;
-}
 
 /* Page header tweaks */
 #page_head {
-  background-color: #67787d;
+  background-color: #fff;
   border-bottom: 3px solid #222;
-  padding: 20px 20px 10px;
-  margin: -20px -20px 20px;
 }
   #page_head h1,
   #page_head h1 a {
-    color: #fff;
+    color: #000;
     margin: 0;
+    padding: 5px 10px;
     font-size: 34px;
   }
-  .header_nav {
-    float: right;
-    margin: -10px 6px 0 0;
-    list-style: none;
-  }
-  .header_nav li {
-    list-style: none;
-    float: left;
-  }
-  .header_nav a {
+  #page_head h2 {
     color: #fff;
-    display: block;
-    margin-right: 5px;
-    padding: 7px 20px;
-    border: 1px solid #fff;
-    border-radius: 6px;
-  }
-  .header_nav li.page_active a {
-    background: #fff;
-    color: #222;
+    margin: 0;
+    padding: 3px 20px;
+    font-size: 18px;
+    background: #ea5c2c;
+    border-bottom: 8px solid #f7c7b7;
   }
 
-#page_main h1,
-#page_main h2,
-#page_main h3,
-#page_main h4,
-#page_main h5,
-#page_main h6 {
-  color: #000;
-  margin-top: 20px;
+#region_head_logo {
+  padding-top: 20px;
+}
+
+.container {
+  background: #fff;
+  border: 6px solid #444;
 }
 
 /* page footer */
@@ -104,8 +68,10 @@ h3, h4 {
   background-color: #ddd;
   border-top: 1px solid #bbb;
   border-bottom: 1px solid #39414D;
-  padding: 20px 20px 10px;
-  margin: -20px -20px 20px;
+}
+
+.inside {
+  padding: 20px;
 }
 
 .left {

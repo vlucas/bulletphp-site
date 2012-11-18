@@ -1,5 +1,5 @@
 site:
-    title: Bullet - PHP Microframework
+    title: Bullet - PHP Micro-Framework
     description: Bullet is a PHP micro-framework designed for building HTTP APIs and applications. Bullet takes a unique nested callback approach to routing that allows for more flexibility and requires less verbosity than the more typical full route+callback approach.
     author: Vance Lucas
     pretty_urls: true

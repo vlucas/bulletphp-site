@@ -1,3 +1,13 @@
+{% macro nav_entry(slug, current, label) %}
+{% spaceless %}
+{% if current == slug %}
+<a class="active" href="{{ pcurl(slug) }}">{{ label }}</a>
+{% else %}
+<a href="{{ pcurl(slug) }}">{{ label }}</a>
+{% endif %}
+{% endspaceless %}
+{% endmacro %}
+
 <!doctype html>
 <html>
 <head>
@@ -12,32 +22,36 @@
 
     <div class="container">
 
-      <div id="page_content">
+      <div class="row">
         <div id="page_head">
-          <div class="row">
-            <div id="region_head_logo" class="span6">
-            {% block header %}
-                <h1><a href="{{ site.root }}">{{ site.title }}</a></h1>
-            {% endblock %}
-            </div>
-            <div id="region_head_nav" class="span6">
-              <ul class="header_nav">
-                <li><a href="{{ site.root }}">Home</a></li>
-                <li><a href="{{ pcurl('docs') }}">Documentation</a></li>
-                <li><a href="{{ pcurl('blog') }}">Blog</a></li>
-              </ul>
-            </div>
+          <div id="region_head_logo" class="span12">
+          {% block header %}
+              <h1><a href="{{ site.root }}">{{ site.title }}</a></h1>
+              <h2>The Functional-Style PHP Micro-framework Built for REST APIs</h2>
+          {% endblock %}
           </div>
         </div>
-        <div class="row">
-          <div id="page_main" class="span8">
+      </div>
+
+      <div class="row">
+        <div id="page_main" class="span8">
+          <div class="inside">
             {% block content %}
                 {{ content|raw }}
-        		{% endblock %}
+            {% endblock %}
           </div>
+        </div>
 
-          <div id="page_side" class="span4">
+        <div id="page_side" class="span4">
+          <div class="inside">
             <!-- content -->
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li>{{ _self.nav_entry('', page.slug, 'Home') }}</li>
+                <li>{{ _self.nav_entry('docs', page.slug, 'Documentation') }}</li>
+                <li>{{ _self.nav_entry('blog', page.slug, 'Blog') }}</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -45,14 +59,18 @@
       <footer id="page_foot">
         <div class="row">
           <div id="region_foot" class="span9">
-          {% block footer %}
-            <p>Using Bullet in an awesome project? <a href="http://twitter.com/vlucas">Let me know</a>!</p>
-            <p>BulletPHP &copy; 2012 <a href="http://www.vancelucas.com">Vance Lucas</a> from <a href="http://brightbit.com">Brightbit</a>. All rights reserved. Open source under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD license</a>.</p>
-          {% endblock %}
+            <div class="inside">
+              {% block footer %}
+                <p>Using Bullet in an awesome project? <a href="http://twitter.com/vlucas">Let me know</a>!</p>
+                <p>BulletPHP &copy; 2012 <a href="http://www.vancelucas.com">Vance Lucas</a> from <a href="http://brightbit.com">Brightbit</a>. All rights reserved. Open source under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD license</a>.</p>
+              {% endblock %}
+            </div>
           </div>
           <div class="span3 right">
-            <a href="http://brightbit.com">Built by Brightbit</a><br />
-            <small>Site powered by <a href="http://bolt80.com/piecrust/">PieCrust</a></small>
+            <div class="inside">
+              <a href="http://brightbit.com">Built by Brightbit</a><br />
+              <small>Site powered by <a href="http://bolt80.com/piecrust/">PieCrust</a></small>
+            </div>
           </div>
         </div>
       </footer>
