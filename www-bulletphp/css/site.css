@@ -3,7 +3,7 @@
  */
 
 /* custom font */
-@import url(http://fonts.googleapis.com/css?family=Droid+Sans|Cabin:400,700|Chivo);
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans|Cabin:400,700);
 
 /* Override some defaults */
 html, body {
@@ -26,7 +26,7 @@ h2 {
   margin-bottom: 10px;
 }
 h3, h4 {
-  font-family: 'Chivo', Helvetica, Arial, sans-serif;
+  font-family: 'Cabin', Helvetica, Arial, sans-serif;
   font-weight: bold;
   margin: 0!important;
   padding: 0!important;
@@ -36,7 +36,6 @@ h3, h4 {
 /* Page header tweaks */
 #page_head {
   background-color: #fff;
-  border-bottom: 3px solid #222;
 }
   #page_head h1,
   #page_head h1 a {
