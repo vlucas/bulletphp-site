@@ -1,0 +1,166 @@
+
+<!doctype html>
+<html>
+<head>
+  <title>Bullet - PHP Micro-Framework &mdash; Events - Intercepting Requests and Injecting Responses</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="description" content="Bullet is a PHP micro-framework designed for building HTTP APIs and applications. Bullet takes a unique nested callback approach to routing that allows for more flexibility and requires less verbosity than the more typical full route+callback approach." />
+	<meta name="author" content="Vance Lucas" />
+  <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
+</head>
+<body>
+
+    <div class="container">
+
+      <div class="row">
+        <div id="page_head">
+          <div id="region_head_logo" class="span12">
+                        <h1><a href="/">Bullet - PHP Micro-Framework</a></h1>
+              <h2>The Functional-Style PHP Micro-framework Built for REST APIs</h2>
+                    </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="page_main" class="span8">
+          <div class="inside">
+                            <h2>Events</h2>
+
+<p>Events in Bullet allow you to intercept and modify requests before they hit your
+application, and alter responses after your application sends them, but before
+they are sent to the browser or user. Events can be used anytime you need to
+apply a global behavior to your application when it meets certain conditions.</p>
+
+<p>Events can be useful for injecting custom responses on specific status codes,
+like serving a custom &#8220;File Not Found&#8221; page every time a <code>404</code> HTTP status is
+sent by your application. They can also be used for things like decoding a
+request body a custom way or performing user authentication checks if a cookie
+or HTTP Auth headers are present.</p>
+
+<h3>Named Events</h3>
+
+<p>Fixed event names that are always fired in a bullet request/response cycle.</p>
+
+<ul>
+<li><code>before</code> - Before any route handler is matched or executed</li>
+<li><code>after</code> - After the last route handler is executed and the response is ready to be sent</li>
+</ul>
+
+<h3>Dynamic Events</h3>
+
+<p>Dynamic events are dependent upon the response being sent from your
+application, and are fired just before the <code>after</code> event.</p>
+
+<ul>
+<li><code>[http_status_code]</code> - Like <code>404</code>, or <code>500</code>, etc.</li>
+<li><code>[response_format]</code> - Like <code>html</code>, <code>json</code>, <code>xml</code>, etc.</li>
+<li><code>[exception_class]</code> - Exception class name like <code>InvalidArgumentException</code>. Every
+exception also triggers the base <code>Exception</code> event that you can use to handle all
+exceptions, and set the HTTP response status to <code>500</code> by default.</li>
+</ul>
+
+<h2>Specific Examples</h2>
+
+<p>Here are a few examples to get you started with event handling:</p>
+
+<h3>Serving Custom 404 Pages</h3>
+
+<p>This example injects the contents of a custom <code>errors/404</code> template into the response
+every time the application sends a 404 error.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">on</span><span style="color: #009900;">&#40;</span><span style="color: #cc66cc;">404</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span>\Bullet\Request <span style="color: #000088;">$request</span><span style="color: #339933;">,</span> \Bullet\Response <span style="color: #000088;">$response</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #000088;">$response</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">content</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">template</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'errors/404'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">content</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<p>This example uses <a href="/docs/templates">templates</a> and may require some configuration.</p>
+
+<h3>Capture and log Exceptions</h3>
+
+<p>Exceptions are unique to other events because instead of only a request and response
+object getting passed, a third argument is passed - the Exception object. This example
+displays Exceptions in a nice format, and logs them to <a href="http://getsentry.com">Sentry</a> when in production.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #666666; font-style: italic;">// Display exceptions with error and 500 status</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">on</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'Exception'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span>\Bullet\Request <span style="color: #000088;">$request</span><span style="color: #339933;">,</span> \Bullet\Response <span style="color: #000088;">$response</span><span style="color: #339933;">,</span> \Exception <span style="color: #000088;">$e</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #339933;">,</span> <span style="color: #000088;">$raven</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #b1b100;">if</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">format</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #339933;">===</span> <span style="color: #0000ff;">'json'</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+        <span style="color: #000088;">$response</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">content</span><span style="color: #009900;">&#40;</span><a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+            <span style="color: #0000ff;">'exception'</span> <span style="color: #339933;">=&gt;</span> <a href="http://www.php.net/get_class"><span style="color: #990000;">get_class</span></a><span style="color: #009900;">&#40;</span><span style="color: #000088;">$e</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">,</span>
+            <span style="color: #0000ff;">'message'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #000088;">$e</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">getMessage</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span>
+        <span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+    <span style="color: #009900;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #009900;">&#123;</span>
+        <span style="color: #000088;">$response</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">content</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">template</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'errors/exception'</span><span style="color: #339933;">,</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'e'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #000088;">$e</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">content</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+    <span style="color: #009900;">&#125;</span>
+&nbsp;
+    <span style="color: #b1b100;">if</span><span style="color: #009900;">&#40;</span>BULLET_ENV <span style="color: #339933;">==</span> <span style="color: #0000ff;">'production'</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+        <span style="color: #666666; font-style: italic;">// Log Exception to Sentry</span>
+        <span style="color: #000088;">$raven</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">captureException</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$e</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+    <span style="color: #009900;">&#125;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+                      </div>
+        </div>
+
+        <div id="page_side" class="span4">
+          <div class="inside">
+            <!-- content -->
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li><a href="/">Home</a></li>
+                <li><a href="/docs">Documentation</a>
+                  <ul>
+                    <li><a href="/docs/install">Installation Guide</a>
+                    <li><a href="/docs/organization">Project Organization</a>
+                    <li><a class="active" href="/docs/events">Event Handling</a>
+                    <li><a href="/docs/templates">Templates &amp; Views</a>
+                    <li><a href="/docs/request">Request</a>
+                    <li><a href="/docs/response">Response</a>
+                  </ul>
+                </li>
+                <li><a href="/blog">Blog</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer id="page_foot">
+        <div class="row">
+          <div id="region_foot" class="span9">
+            <div class="inside">
+                              <p>Using Bullet in an awesome project? <a href="http://twitter.com/vlucas">Let me know</a>!</p>
+                <p>BulletPHP &copy; 2012 <a href="http://www.vancelucas.com">Vance Lucas</a> from <a href="http://brightbit.com">Brightbit</a>. All rights reserved. Open source under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD license</a>.</p>
+                          </div>
+          </div>
+          <div class="span3 right">
+            <div class="inside">
+              <a href="http://brightbit.com">Built by Brightbit</a><br />
+              <small>Site powered by <a href="http://bolt80.com/piecrust/">PieCrust</a></small>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div> <!-- /container -->
+
+    <!-- Github Badge -->
+    <a href="http://github.com/vlucas/bulletphp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <!-- GA Tracker Code -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-359731-31']);
+      _gaq.push(['_setDomainName', 'bulletphp.com']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+	
+</body>
+</html>

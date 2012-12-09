@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Bullet - PHP Micro-Framework &mdash; Introducing Bullet</title>
+  <title>Bullet - PHP Micro-Framework &mdash; The Bullet Request Object</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="description" content="Bullet is a PHP micro-framework designed for building HTTP APIs and applications. Bullet takes a unique nested callback approach to routing that allows for more flexibility and requires less verbosity than the more typical full route+callback approach." />
 	<meta name="author" content="Vance Lucas" />
@@ -25,22 +25,22 @@
       <div class="row">
         <div id="page_main" class="span8">
           <div class="inside">
-            	<h2>Introducing Bullet</h2>
-	<div class="post-meta">
-		<span class="post-date">October 15, 2012&nbsp;</span>
-		<span class="post-author">by Vance Lucas</span>	</div>
-	<p>Introducing a new PHP micro-framework: Bullet. Bullet is a resource-oriented
-micro PHP framework built around HTTP URIs. Bullet takes a unique functional-
-style approach to URL routing by parsing each path part independently and one
-at a time using nested closures. The path part callbacks are nested to produce
-different responses and to follow and execute deeper paths as paths and
-parameters are matched.</p>
+                            <h2>The Bullet Request Object</h2>
 
-<p>Bullet makes it easier than ever to build REST APIs and other applications in PHP
-in a simple, concise, and straightforward manner with almost no learning curve
-and nearly unlimited flexibility.</p>
+<p>Bullet passes a <code>Bullet\Request</code> object as the first argument to any callback
+or route hanlder that is matched. This object contains all the information
+about the current request context, like request URI, method, POST variables,
+query string variables, etc.</p>
 
-          </div>
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'test'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+        <a href="http://www.php.net/var_dump"><span style="color: #990000;">var_dump</span></a><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+    <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+                      </div>
         </div>
 
         <div id="page_side" class="span4">
@@ -55,7 +55,7 @@ and nearly unlimited flexibility.</p>
                     <li><a href="/docs/organization">Project Organization</a>
                     <li><a href="/docs/events">Event Handling</a>
                     <li><a href="/docs/templates">Templates &amp; Views</a>
-                    <li><a href="/docs/request">Request</a>
+                    <li><a class="active" href="/docs/request">Request</a>
                     <li><a href="/docs/response">Response</a>
                   </ul>
                 </li>

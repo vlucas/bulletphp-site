@@ -95,9 +95,42 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
         // line 51
         if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
         echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs", 1 => $this->getAttribute($_page_, "slug"), 2 => "Documentation"), "method"), "html", null, true);
-        echo "</li>
+        echo "
+                  <ul>
+                    <li>";
+        // line 53
+        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/install", 1 => $this->getAttribute($_page_, "slug"), 2 => "Installation Guide"), "method"), "html", null, true);
+        echo "
+                    <li>";
+        // line 54
+        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/organization", 1 => $this->getAttribute($_page_, "slug"), 2 => "Project Organization"), "method"), "html", null, true);
+        echo "
+                    <li>";
+        // line 55
+        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/events", 1 => $this->getAttribute($_page_, "slug"), 2 => "Event Handling"), "method"), "html", null, true);
+        echo "
+                    <li>";
+        // line 56
+        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/templates", 1 => $this->getAttribute($_page_, "slug"), 2 => "Templates & Views"), "method"), "html", null, true);
+        echo "
+                    <li>";
+        // line 57
+        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/request", 1 => $this->getAttribute($_page_, "slug"), 2 => "Request"), "method"), "html", null, true);
+        echo "
+                    <li>";
+        // line 58
+        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/response", 1 => $this->getAttribute($_page_, "slug"), 2 => "Response"), "method"), "html", null, true);
+        echo "
+                  </ul>
+                </li>
                 <li>";
-        // line 52
+        // line 61
         if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
         echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "blog", 1 => $this->getAttribute($_page_, "slug"), 2 => "Blog"), "method"), "html", null, true);
         echo "</li>
@@ -112,9 +145,9 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
           <div id=\"region_foot\" class=\"span9\">
             <div class=\"inside\">
               ";
-        // line 63
+        // line 72
         $this->displayBlock('footer', $context, $blocks);
-        // line 67
+        // line 76
         echo "            </div>
           </div>
           <div class=\"span3 right\">
@@ -145,7 +178,7 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
     </script>
 
 \t";
-        // line 96
+        // line 105
         if (isset($context["piecrust"])) { $_piecrust_ = $context["piecrust"]; } else { $_piecrust_ = null; }
         echo $this->getAttribute($_piecrust_, "debug_info");
         echo "
@@ -180,10 +213,10 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
             ";
     }
 
-    // line 63
+    // line 72
     public function block_footer($context, array $blocks = array())
     {
-        // line 64
+        // line 73
         echo "                <p>Using Bullet in an awesome project? <a href=\"http://twitter.com/vlucas\">Let me know</a>!</p>
                 <p>BulletPHP &copy; 2012 <a href=\"http://www.vancelucas.com\">Vance Lucas</a> from <a href=\"http://brightbit.com\">Brightbit</a>. All rights reserved. Open source under the <a href=\"http://www.opensource.org/licenses/bsd-license.php\">BSD license</a>.</p>
               ";
@@ -250,6 +283,6 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  220 => 6,  210 => 4,  206 => 3,  204 => 2,  191 => 1,  185 => 64,  182 => 63,  174 => 40,  171 => 39,  159 => 29,  156 => 28,  147 => 96,  116 => 67,  114 => 63,  99 => 52,  94 => 51,  89 => 50,  79 => 42,  77 => 39,  68 => 32,  66 => 28,  53 => 19,  48 => 18,  43 => 17,  38 => 16,  20 => 10,  55 => 9,  52 => 8,  44 => 7,  36 => 6,  29 => 4,  26 => 14,  17 => 1,);
+        return array (  253 => 6,  243 => 4,  239 => 3,  237 => 2,  224 => 1,  218 => 73,  215 => 72,  207 => 40,  204 => 39,  192 => 29,  189 => 28,  180 => 105,  149 => 76,  147 => 72,  132 => 61,  125 => 58,  120 => 57,  115 => 56,  110 => 55,  105 => 54,  100 => 53,  94 => 51,  89 => 50,  79 => 42,  77 => 39,  68 => 32,  66 => 28,  53 => 19,  48 => 18,  43 => 17,  38 => 16,  20 => 10,  55 => 9,  52 => 8,  44 => 7,  36 => 6,  29 => 4,  26 => 14,  17 => 1,);
     }
 }

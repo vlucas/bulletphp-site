@@ -1,0 +1,26 @@
+---
+title: Nested Sub-Requests (HMVC style code re-use)
+---
+
+## Nested Sub-Requests (HMVC style code re-use)
+
+Since you explicitly `return` values from Bullet routes instead of
+sending output directly, nested/sub requests are straightforward and easy.
+All route handlers will return `Bullet\Response` instances (even if they
+return a raw string or other data type, they are wrapped in a response
+object by the `run` method), and they can be composed to form a single
+HTTP response.
+
+{% geshi 'php' %}
+$app = new Bullet\App();
+$app->path('foo', function($request) use($app) {
+    return "foo";
+});
+$app->path('bar', function($request) use($app) {
+    $foo = $app->run('GET', 'foo'); // $foo is now a `Bullet\Response` instance
+    return $foo->content() . "bar";
+});
+echo $app->run('GET', 'bar'); // echos 'foobar' with a 200 OK status
+{% endgeshi %}
+
+

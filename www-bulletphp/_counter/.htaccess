@@ -1,5 +1,5 @@
 # Uncomment this if you want to set 'pretty_urls' to 'true'.
-#RewriteEngine on
+RewriteEngine on
 
 # If you're running from a sub-directory, uncomment the RewriteBase statement and
 # change it to the sub-directory name you're using.
@@ -15,5 +15,5 @@ RewriteRule ^.*$ - [NC,L]
 RewriteRule ^.*$ index.php [NC,L]
 
 # Various other configuration stuff.
-SetEnv TZ Canada/Vancouver
+SetEnv TZ America/Chicago
 AddType text/css .less

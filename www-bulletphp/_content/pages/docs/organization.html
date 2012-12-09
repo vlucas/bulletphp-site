@@ -1,0 +1,42 @@
+---
+title: Project Organization and Setup
+---
+
+## Project Organization and Setup
+
+Organizing an application using a micro-framework like Bullet can sometimes be
+a challenge because there is no pre-determined or enforced structure like there
+is with larger frameworks. This gives you a lot more freedom and control, but it
+also comes with questions about where to put certain things like configuration,
+templates, models, etc. and the best way to organize larger projects to maintain
+a good separation of concerns.
+
+This page is offered as the recommended
+way to setup and organize an application built on Bullet so everyone on your team
+stays sane - even if that just means you.
+
+## Folder Organization
+
+Typically, it is desireable to setup your project with a few different top-level
+directories that contain your different main content types. An example might be:
+
+ * `assets` - All your frontend asset files like images, CSS, and javascript
+    * `images` - Image files
+    * `scripts` - JavaScript files
+    * `styles` - CSS/Stylesheets
+ * `lib` - Any custom libraries created specifically for this project
+ * `src` - All route files and anything related to this application
+    * `lang` - Language files, if using I18N
+    * `templates` - Template files
+    * `routes` - Route files
+ * `test` - Tests for this application (any type)
+ * `vendor` - Composer-create folder with Bullet and dependencies
+
+## Route Organization
+
+The easiest way to organize your project is to separate all the router handlers
+for different base routes like `posts`, `events`, and `comments` into different
+same-named files, like `posts.php`, `events.php`, and `comments.php`. This is
+very similar to the way you would separate and organize your code in a larger
+MVC framework with controller classes. If you are following the folder structure
+above, these would be placed in `src/routes`.

@@ -1,0 +1,20 @@
+---
+title: The Bullet Request Object
+---
+
+## The Bullet Request Object
+
+Bullet passes a `Bullet\Request` object as the first argument to any callback
+or route hanlder that is matched. This object contains all the information
+about the current request context, like request URI, method, POST variables,
+query string variables, etc.
+
+{% geshi 'php' %}
+$app = new Bullet\App();
+$app->path('test', function($request) use($app) {
+    $app->post(function($request) use($app) {
+        var_dump($request->post());
+    });
+});
+{% endgeshi %}
+

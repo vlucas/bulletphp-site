@@ -1,0 +1,77 @@
+---
+title: Events - Intercepting Requests and Injecting Responses
+---
+
+## Events
+
+Events in Bullet allow you to intercept and modify requests before they hit your
+application, and alter responses after your application sends them, but before
+they are sent to the browser or user. Events can be used anytime you need to
+apply a global behavior to your application when it meets certain conditions.
+
+Events can be useful for injecting custom responses on specific status codes,
+like serving a custom "File Not Found" page every time a `404` HTTP status is
+sent by your application. They can also be used for things like decoding a
+request body a custom way or performing user authentication checks if a cookie
+or HTTP Auth headers are present.
+
+### Named Events
+
+Fixed event names that are always fired in a bullet request/response cycle.
+
+ * `before` - Before any route handler is matched or executed
+ * `after` - After the last route handler is executed and the response is ready to be sent
+
+### Dynamic Events
+
+Dynamic events are dependent upon the response being sent from your
+application, and are fired just before the `after` event.
+
+ * `[http_status_code]` - Like `404`, or `500`, etc.
+ * `[response_format]` - Like `html`, `json`, `xml`, etc.
+ * `[exception_class]` - Exception class name like `InvalidArgumentException`. Every
+exception also triggers the base `Exception` event that you can use to handle all
+exceptions, and set the HTTP response status to `500` by default.
+
+## Specific Examples
+
+Here are a few examples to get you started with event handling:
+
+### Serving Custom 404 Pages
+
+This example injects the contents of a custom `errors/404` template into the response
+every time the application sends a 404 error.
+
+{% geshi 'php' %}
+$app->on(404, function(\Bullet\Request $request, \Bullet\Response $response) use($app) {
+    $response->content($app->template('errors/404')->content());
+});
+{% endgeshi %}
+
+This example uses [templates](/docs/templates) and may require some configuration.
+
+### Capture and log Exceptions
+
+Exceptions are unique to other events because instead of only a request and response
+object getting passed, a third argument is passed - the Exception object. This example
+displays Exceptions in a nice format, and logs them to [Sentry](http://getsentry.com) when in production.
+
+{% geshi 'php' %}
+// Display exceptions with error and 500 status
+$app->on('Exception', function(\Bullet\Request $request, \Bullet\Response $response, \Exception $e) use($app, $raven) {
+    if($request->format() === 'json') {
+        $response->content(array(
+            'exception' => get_class($e),
+            'message' => $e->getMessage()
+        ));
+    } else {
+        $response->content($app->template('errors/exception', array('e' => $e))->content());
+    }
+
+    if(BULLET_ENV == 'production') {
+        // Log Exception to Sentry
+        $raven->captureException($e);
+    }
+});
+{% endgeshi %}
+

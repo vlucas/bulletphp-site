@@ -1,0 +1,69 @@
+---
+title: View and Templates
+---
+
+## Views, Templates, and Layouts
+
+Bullet comes with full PHP template support that can be used to render basic
+PHP files as templates with some nice enhancements and features bundled in.
+
+## Configuring Templates
+
+Before Bullet can know how to render your templates, you have to let Bullet
+know where they are. If you want to use layouts, Bullet has to know where those
+are too. Template support can be configured with a simple array when creating
+the main `Bullet\App` object:
+
+{% geshi 'php' %}
+$app = new Bullet\App(array(
+    'template.cfg' => array(
+        'path' => __DIR__ . '/templates/',
+        'path_layouts' => __DIR__ . '/templates/layout/',
+        'auto_layout' => 'application'
+    )
+));
+{% endgeshi %}
+
+The `auto_layout` flag, if set to a string, will automatically wrap all templates
+in a layout file of the same name if no other layout is specified. So in this
+example, a layout file would have to exist at `src/templates/layout/application.html.php`.
+If you don't want this behavior, set the flag to boolean `false` or simply remove
+it (it is off by default).
+
+## Responding With Templates From Routes
+
+Bullet has a built-in helper method `template` for rendering templates as HTTP
+responses from routes:
+
+{% geshi 'php' %}
+$app->path('/', function($request) use($app) {
+    return $app->template('hello', array('name' => 'World'));
+});
+{% endgeshi %}
+
+Note that you are using `return` instead of `echo` or `print`. This is an important
+feature of Bullet. Every route should respond with a valid response type, and
+the `Bullet\View\Template` object is actually a valid HTTP response that knows
+how to render itself on-demand. This means that you are returning a template
+object, and not a rendered chunk of content. This allows you to further
+manipulate the response and alter it in [events](/docs/events) and nested
+[sub-requests](/docs/sub-requests), even after this route is matched and executed.
+
+## Full-Featured Example
+
+Here is a more full-featured example of template usage, just so you can see all
+the options that are available to you. The `header` and `status` methods come
+from the `Bullet\Request` object that the template object extends (a template
+is literally a form of an HTTP response in Bullet).
+
+{% geshi 'php' %}
+$app->path('/', function($request) use($app) {
+    return $app->template('hello')
+        ->set(array('name' => 'World'))
+        ->layout('auth')
+        ->format('xml') // makes it xml.php instead of html.php
+        ->header('Content-Type', 'text/xml')
+        ->status(200);
+});
+{% endgeshi %}
+

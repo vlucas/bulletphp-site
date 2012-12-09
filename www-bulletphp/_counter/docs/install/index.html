@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Bullet - PHP Micro-Framework &mdash; Introducing Bullet</title>
+  <title>Bullet - PHP Micro-Framework &mdash; Setup &amp;amp; Installation Guide</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="description" content="Bullet is a PHP micro-framework designed for building HTTP APIs and applications. Bullet takes a unique nested callback approach to routing that allows for more flexibility and requires less verbosity than the more typical full route+callback approach." />
 	<meta name="author" content="Vance Lucas" />
@@ -25,22 +25,65 @@
       <div class="row">
         <div id="page_main" class="span8">
           <div class="inside">
-            	<h2>Introducing Bullet</h2>
-	<div class="post-meta">
-		<span class="post-date">October 15, 2012&nbsp;</span>
-		<span class="post-author">by Vance Lucas</span>	</div>
-	<p>Introducing a new PHP micro-framework: Bullet. Bullet is a resource-oriented
-micro PHP framework built around HTTP URIs. Bullet takes a unique functional-
-style approach to URL routing by parsing each path part independently and one
-at a time using nested closures. The path part callbacks are nested to produce
-different responses and to follow and execute deeper paths as paths and
-parameters are matched.</p>
+                            <h2>Installing with Composer</h2>
 
-<p>Bullet makes it easier than ever to build REST APIs and other applications in PHP
-in a simple, concise, and straightforward manner with almost no learning curve
-and nearly unlimited flexibility.</p>
+<p><a href="http://getcomposer.org/">Composer</a> is the only supported way to install Bullet,
+and it is available on <a href="https://packagist.org/packages/vlucas/bulletphp">Packagist</a>.</p>
 
-          </div>
+<p>Use the composer <a href="http://getcomposer.org/doc/01-basic-usage.md">basic usage guide</a>,
+or follow the steps below:</p>
+
+<p>Setup your <code>composer.json</code> file at the root of your project</p>
+
+<pre><code>{
+    "require": {
+        "vlucas/bulletphp": "*"
+    }
+}
+</code></pre>
+
+<p>Install Composer</p>
+
+<pre><code>curl -s http://getcomposer.org/installer | php
+</code></pre>
+
+<p>Install Dependencies (will download Bullet and dependencies)</p>
+
+<pre><code>php composer.phar install
+</code></pre>
+
+<p>Create <code>index.php</code> in root directory (use the minimal example below to get started)</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">&lt;?php</span>
+<span style="color: #b1b100;">require</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/vendor/autoload.php'</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Your App</span>
+<span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'/'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">&quot;Hello World!&quot;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Run the app! (takes $method, $url or Bullet\Request object)</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Bullet\Request<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<p>Use an <code>.htaccess</code> file for mod_rewrite (if you&#8217;re using Apache)</p>
+
+<pre><code>&lt;IfModule mod_rewrite.c&gt;
+  RewriteEngine On
+
+  # Reroute any incoming requestst that is not an existing directory or file
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ index.php?u=$1 [L,QSA]
+&lt;/IfModule&gt;
+</code></pre>
+
+<p>Now view it in your browser.</p>
+
+<p>You should see &#8220;Hello World&#8221; in your browser if everything is working correctly.</p>
+
+                      </div>
         </div>
 
         <div id="page_side" class="span4">
@@ -51,7 +94,7 @@ and nearly unlimited flexibility.</p>
                 <li><a href="/">Home</a></li>
                 <li><a href="/docs">Documentation</a>
                   <ul>
-                    <li><a href="/docs/install">Installation Guide</a>
+                    <li><a class="active" href="/docs/install">Installation Guide</a>
                     <li><a href="/docs/organization">Project Organization</a>
                     <li><a href="/docs/events">Event Handling</a>
                     <li><a href="/docs/templates">Templates &amp; Views</a>

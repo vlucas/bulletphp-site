@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Bullet - PHP Micro-Framework &mdash; Introducing Bullet</title>
+  <title>Bullet - PHP Micro-Framework &mdash; Project Organization and Setup</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="description" content="Bullet is a PHP micro-framework designed for building HTTP APIs and applications. Bullet takes a unique nested callback approach to routing that allows for more flexibility and requires less verbosity than the more typical full route+callback approach." />
 	<meta name="author" content="Vance Lucas" />
@@ -25,22 +25,54 @@
       <div class="row">
         <div id="page_main" class="span8">
           <div class="inside">
-            	<h2>Introducing Bullet</h2>
-	<div class="post-meta">
-		<span class="post-date">October 15, 2012&nbsp;</span>
-		<span class="post-author">by Vance Lucas</span>	</div>
-	<p>Introducing a new PHP micro-framework: Bullet. Bullet is a resource-oriented
-micro PHP framework built around HTTP URIs. Bullet takes a unique functional-
-style approach to URL routing by parsing each path part independently and one
-at a time using nested closures. The path part callbacks are nested to produce
-different responses and to follow and execute deeper paths as paths and
-parameters are matched.</p>
+                            <h2>Project Organization and Setup</h2>
 
-<p>Bullet makes it easier than ever to build REST APIs and other applications in PHP
-in a simple, concise, and straightforward manner with almost no learning curve
-and nearly unlimited flexibility.</p>
+<p>Organizing an application using a micro-framework like Bullet can sometimes be
+a challenge because there is no pre-determined or enforced structure like there
+is with larger frameworks. This gives you a lot more freedom and control, but it
+also comes with questions about where to put certain things like configuration,
+templates, models, etc. and the best way to organize larger projects to maintain
+a good separation of concerns.</p>
 
-          </div>
+<p>This page is offered as the recommended
+way to setup and organize an application built on Bullet so everyone on your team
+stays sane - even if that just means you.</p>
+
+<h2>Folder Organization</h2>
+
+<p>Typically, it is desireable to setup your project with a few different top-level
+directories that contain your different main content types. An example might be:</p>
+
+<ul>
+<li><code>assets</code> - All your frontend asset files like images, CSS, and javascript
+
+<ul>
+<li><code>images</code> - Image files</li>
+<li><code>scripts</code> - JavaScript files</li>
+<li><code>styles</code> - CSS/Stylesheets</li>
+</ul></li>
+<li><code>lib</code> - Any custom libraries created specifically for this project</li>
+<li><code>src</code> - All route files and anything related to this application
+
+<ul>
+<li><code>lang</code> - Language files, if using I18N</li>
+<li><code>templates</code> - Template files</li>
+<li><code>routes</code> - Route files</li>
+</ul></li>
+<li><code>test</code> - Tests for this application (any type)</li>
+<li><code>vendor</code> - Composer-create folder with Bullet and dependencies</li>
+</ul>
+
+<h2>Route Organization</h2>
+
+<p>The easiest way to organize your project is to separate all the router handlers
+for different base routes like <code>posts</code>, <code>events</code>, and <code>comments</code> into different
+same-named files, like <code>posts.php</code>, <code>events.php</code>, and <code>comments.php</code>. This is
+very similar to the way you would separate and organize your code in a larger
+MVC framework with controller classes. If you are following the folder structure
+above, these would be placed in <code>src/routes</code>.</p>
+
+                      </div>
         </div>
 
         <div id="page_side" class="span4">
@@ -52,7 +84,7 @@ and nearly unlimited flexibility.</p>
                 <li><a href="/docs">Documentation</a>
                   <ul>
                     <li><a href="/docs/install">Installation Guide</a>
-                    <li><a href="/docs/organization">Project Organization</a>
+                    <li><a class="active" href="/docs/organization">Project Organization</a>
                     <li><a href="/docs/events">Event Handling</a>
                     <li><a href="/docs/templates">Templates &amp; Views</a>
                     <li><a href="/docs/request">Request</a>
