@@ -39,4 +39,40 @@ for different base routes like `posts`, `events`, and `comments` into different
 same-named files, like `posts.php`, `events.php`, and `comments.php`. This is
 very similar to the way you would separate and organize your code in a larger
 MVC framework with controller classes. If you are following the folder structure
-above, these would be placed in `src/routes`.
+above, these would be placed in `src/routes`. You would then `require` these
+files in your main `index.php` file that serves your Bullet application.
+
+Your main index file would then look something like this:
+
+{% geshi 'php' %}
+<?php
+// Composer Autoloader
+$loader = require __DIR__ . '/vendor/autoload.php';
+$loader->add('Entity', __DIR__ . '/src/'); // Entities
+$loader->add('App', __DIR__ . '/lib/'); // Custom app/lib files
+
+// Directories
+$srcDir = __DIR__ . '/src/';
+$routeDir = $srcDir . '/routes/';
+
+// Bullet App
+$app = new Bullet\App(require $srcDir . 'config.php');
+$request = new Bullet\Request();
+
+// Common include (db connection, setup, common objects, etc.)
+require $srcDir . '/common.php';
+
+// Require all paths/routes
+require $routeDir . 'index.php';
+require $routeDir . 'events.php';
+require $routeDir . 'posts.php';
+require $routeDir . 'users.php';
+
+// Response
+echo $app->run($request);
+{% endgeshi %}
+
+So just like larger frameworks that have full MVC structures and controllers,
+a good separation of concerns can be maintained and all the routes and
+corresponding logic are broken up into more digestible independent files.
+

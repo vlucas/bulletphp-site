@@ -70,7 +70,41 @@ for different base routes like <code>posts</code>, <code>events</code>, and <cod
 same-named files, like <code>posts.php</code>, <code>events.php</code>, and <code>comments.php</code>. This is
 very similar to the way you would separate and organize your code in a larger
 MVC framework with controller classes. If you are following the folder structure
-above, these would be placed in <code>src/routes</code>.</p>
+above, these would be placed in <code>src/routes</code>. You would then <code>require</code> these
+files in your main <code>index.php</code> file that serves your Bullet application.</p>
+
+<p>Your main index file would then look something like this:</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">&lt;?php</span>
+<span style="color: #666666; font-style: italic;">// Composer Autoloader</span>
+<span style="color: #000088;">$loader</span> <span style="color: #339933;">=</span> <span style="color: #b1b100;">require</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/vendor/autoload.php'</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$loader</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">add</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'Entity'</span><span style="color: #339933;">,</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/src/'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Entities</span>
+<span style="color: #000088;">$loader</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">add</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'App'</span><span style="color: #339933;">,</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/lib/'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Custom app/lib files</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Directories</span>
+<span style="color: #000088;">$srcDir</span> <span style="color: #339933;">=</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/src/'</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$routeDir</span> <span style="color: #339933;">=</span> <span style="color: #000088;">$srcDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/routes/'</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Bullet App</span>
+<span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><span style="color: #b1b100;">require</span> <span style="color: #000088;">$srcDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'config.php'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$request</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\Request<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Common include (db connection, setup, common objects, etc.)</span>
+<span style="color: #b1b100;">require</span> <span style="color: #000088;">$srcDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/common.php'</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Require all paths/routes</span>
+<span style="color: #b1b100;">require</span> <span style="color: #000088;">$routeDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'index.php'</span><span style="color: #339933;">;</span>
+<span style="color: #b1b100;">require</span> <span style="color: #000088;">$routeDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'events.php'</span><span style="color: #339933;">;</span>
+<span style="color: #b1b100;">require</span> <span style="color: #000088;">$routeDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'posts.php'</span><span style="color: #339933;">;</span>
+<span style="color: #b1b100;">require</span> <span style="color: #000088;">$routeDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'users.php'</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Response</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<p>So just like larger frameworks that have full MVC structures and controllers,
+a good separation of concerns can be maintained and all the routes and
+corresponding logic are broken up into more digestible independent files.</p>
 
                       </div>
         </div>

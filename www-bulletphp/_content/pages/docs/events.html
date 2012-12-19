@@ -43,7 +43,10 @@ This example injects the contents of a custom `errors/404` template into the res
 every time the application sends a 404 error.
 
 {% geshi 'php' %}
-$app->on(404, function(\Bullet\Request $request, \Bullet\Response $response) use($app) {
+use Bullet\Request;
+use Bullet\Response;
+
+$app->on(404, function(Request $request, Response $response) use($app) {
     $response->content($app->template('errors/404')->content());
 });
 {% endgeshi %}
@@ -57,8 +60,11 @@ object getting passed, a third argument is passed - the Exception object. This e
 displays Exceptions in a nice format, and logs them to [Sentry](http://getsentry.com) when in production.
 
 {% geshi 'php' %}
+use Bullet\Request;
+use Bullet\Response;
+
 // Display exceptions with error and 500 status
-$app->on('Exception', function(\Bullet\Request $request, \Bullet\Response $response, \Exception $e) use($app, $raven) {
+$app->on('Exception', function(Request $request, Response $response, \Exception $e) use($app, $raven) {
     if($request->format() === 'json') {
         $response->content(array(
             'exception' => get_class($e),

@@ -88,59 +88,6 @@ hooks and filters, because you can just run the checks and load objects you
 need before you define other nested paths and <code>use</code> them when required.</p></li>
 </ul>
 
-<h2>Installing with Composer</h2>
-
-<p>Use the <a href="http://getcomposer.org/doc/01-basic-usage.md">basic usage guide</a>,
-or follow the steps below:</p>
-
-<p>Setup your <code>composer.json</code> file at the root of your project</p>
-
-<pre><code>{
-    "require": {
-        "vlucas/bulletphp": "*"
-    }
-}
-</code></pre>
-
-<p>Install Composer</p>
-
-<pre><code>curl -s http://getcomposer.org/installer | php
-</code></pre>
-
-<p>Install Dependencies (will download Bullet)</p>
-
-<pre><code>php composer.phar install
-</code></pre>
-
-<p>Create <code>index.php</code> (use the minimal example below to get started)</p>
-
-<pre class="php" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">&lt;?php</span>
-<span style="color: #b1b100;">require</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/vendor/autoload.php'</span><span style="color: #339933;">;</span>
-&nbsp;
-<span style="color: #666666; font-style: italic;">// Your App</span>
-<span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
-<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'/'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
-    <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">&quot;Hello World!&quot;</span><span style="color: #339933;">;</span>
-<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
-&nbsp;
-<span style="color: #666666; font-style: italic;">// Run the app! (takes $method, $url or Bullet\Request object)</span>
-<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Bullet\Request<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
-&nbsp;</pre>
-
-<p>Use an <code>.htaccess</code> file for mod_rewrite (if you&#8217;re using Apache)</p>
-
-<pre><code>&lt;IfModule mod_rewrite.c&gt;
-  RewriteEngine On
-
-  # Reroute any incoming requestst that is not an existing directory or file
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^(.*)$ index.php?u=$1 [L,QSA]
-&lt;/IfModule&gt;
-</code></pre>
-
-<p>View it in your browser!</p>
-
 <h2>Syntax</h2>
 
 <p>Bullet is not your typical PHP micro framework. Instead of defining a full
