@@ -68,7 +68,7 @@ method call with a custom name and a callback that runs the validation.</p>
 
 <p>This is the callback that Bullet uses for <code>int</code> paths:</p>
 
-<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$this</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">registerParamType</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'int'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$value</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">registerParamType</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'int'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$value</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
     <span style="color: #b1b100;">return</span> <a href="http://www.php.net/filter_var"><span style="color: #990000;">filter_var</span></a><span style="color: #009900;">&#40;</span><span style="color: #000088;">$value</span><span style="color: #339933;">,</span> FILTER_VALIDATE_INT<span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
 <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
 &nbsp;</pre>

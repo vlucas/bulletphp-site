@@ -45,7 +45,7 @@ method call with a custom name and a callback that runs the validation.
 This is the callback that Bullet uses for `int` paths:
 
 {% geshi 'php' %}
-$this->registerParamType('int', function($value) {
+$app->registerParamType('int', function($value) {
     return filter_var($value, FILTER_VALIDATE_INT);
 });
 {% endgeshi %}
