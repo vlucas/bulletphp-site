@@ -2,11 +2,14 @@
 title: Bullet PHP Micro-Framework
 ---
 
-Bullet is a resource-oriented micro PHP framework built around HTTP URIs.
-Bullet takes a unique functional-style approach to URL routing by parsing
-each path part independently and one at a time using nested closures. The
-path part callbacks are nested to produce different responses and to follow
-and execute deeper paths as paths and parameters are matched.
+What is Bullet?
+---------------
+
+Bullet is a PHP micro-framework that helps you easily create REST APIs and web
+applications that automatically conform to the requirements of the
+[HTTP specifiction](http://www.ietf.org/rfc/rfc2616.txt). Bullet is resource
+and URI-oriented and comes pre-loaded with powerful HTTP features like
+content-negotiation and caching.
 
 Requirements
 ------------
@@ -19,26 +22,20 @@ Rules
 -----
 
  * Apps are **built around HTTP URIs** and defined paths, not forced MVC
-   (but MVC-style separation of concerns is still highly recommenended and
+   (but MVC-style [code organization](/docs/organization) is still highly recommenended and
    encouraged)
  * Bullet handles **one segment of the path at a time**, and executes the
    callback for that path segment before proceesing to the next segment 
    (path callbacks are executed from left to right, until the entire path
    is consumed).
- * If the entire path cannot be consumed, a 404 error will be returned
-   (note that some callbacks may have been executed before Bullet can
-   know this due to the nature of callbacks and closures). Example: path
-   `/events/45/edit` may return a 404 because there is no `edit` path
-   callback, but paths `events` and `45` would have already been executed
-   before Bullet can know to return a 404. This is why all your primary
-   logic should be contained in `get`, `post`, or other method callbacks
-   or in the model layer (and not in the bare `path` handlers).
+ * If the entire path cannot be consumed, a `404` error will be returned (path
+   was not found).
  * If the path can be fully consumed, and HTTP method handlers are present
-   in the path but none are matched, a 405 "Method Not Allowed" response
-   will be returned.
+   in the path but none are matched, a `405` "Method Not Allowed" response
+   will be returned (if the request is a POST, but you only have a GET handler).
  * If the path can be fully consumed, and format handlers are present in
-   the path but none are matched, a 406 "Not Acceptable" response will
-   be returned.
+   the path but none are matched, a `406` "Not Acceptable" response will
+   be returned (if 'xml' is requested, but you only have a 'json' handler).
 
 Advantages
 ----------
@@ -50,7 +47,7 @@ Advantages
    formats, and do not require a controller with specific method names to
    respond to specific HTTP methods. You can nest routes as many levels deep as
    you want to expose nested resources like `posts/42/comments/943/edit` with a
-   level of ease not found in most other routing libraries or frameworks.
+   level of ease and elegance not found elsewhere.
 
  * **Reduced code duplication (DRY)**. Bullet takes full advantage of its nested
    closure routing system to reduce a lot of typical code duplication required
@@ -79,7 +76,7 @@ contain all the logic for the action you want to perform.
 This type of unique callback nesting eliminates repetitive code for
 loading records, checking authentication, and performing other setup
 work found in typical MVC frameworks or other microframeworks where each
-callback or action is in a separate scope or controller method.
+callback or action is in a separate scope or class method.
 
 {% geshi 'php' %}
 $app = new Bullet\App(array(

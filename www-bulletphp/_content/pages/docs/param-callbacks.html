@@ -1,0 +1,67 @@
+---
+title: Param Callbacks
+---
+
+## Param Callbacks
+
+Param callbacks allow you to respond to and capture path segments that match
+specific patterns or contain specific characters. Param callbacks are named 
+patterns with matcher callbacks like `int` that only matches integers.
+
+### Built-In Param Callback Types
+
+There are several built-in callback types that cover the most common URI
+segment patterns that you will want to respond with. These types are:
+
+ * `int` - Matches integers and numbers
+ * `float` - Matches floating point numbers
+ * `boolean` - Matches "1", "true", "on", and "yes" (based on
+   `FILTER_VALIDATE_BOOLEAN`)
+ * `slug` - Matches alphanumeric URL pattern with underscores and dashes
+   (`[a-zA-Z0-9-_]`)
+ * `email` - Matches valid email addresses using `FILTER_VALIDATE_EMAIL`
+
+This example uses the `slug` param matcher to match only URL slugs. This will
+match URIs like `/posts/my-post-title` and will output `Post: my-post-title`.
+
+{% geshi 'php' %}
+$app->path('posts', function($request) use($app) {
+    $app->param('slug', function($request, $postId) use($app) {
+        return "Post: " . $postId;
+    });
+});
+{% endgeshi %}
+
+<div class="alert alert-info">
+  The `param` method path callback will have a second argument that holds
+  the matched URI segment or other returned value (`$postId` in this example).
+</div>
+
+### Register a Custom Type
+
+If you need to register your own custom param type, it's as simple as one
+method call with a custom name and a callback that runs the validation.
+
+This is the callback that Bullet uses for `int` paths:
+
+{% geshi 'php' %}
+$this->registerParamType('int', function($value) {
+    return filter_var($value, FILTER_VALIDATE_INT);
+});
+{% endgeshi %}
+
+### Matching Rules
+
+If the param callback returns boolean `true`, the attached path callback will
+be executed and the original URI segment will be passed to the attached path
+callback.
+
+If the param callback returns any value (anything other than boolean `false`),
+the attached callback will be executed, and the returned value will be passed
+to the path callback. This is useful if you want to modify the URI segment
+before it gets passed to the attached path callback.
+
+If the param callback returns boolean `false` (no match), the attached path
+callback will be skipped and never executed.
+
+

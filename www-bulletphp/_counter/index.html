@@ -25,11 +25,13 @@
       <div class="row">
         <div id="page_main" class="span8">
           <div class="inside">
-                            <p>Bullet is a resource-oriented micro PHP framework built around HTTP URIs.
-Bullet takes a unique functional-style approach to URL routing by parsing
-each path part independently and one at a time using nested closures. The
-path part callbacks are nested to produce different responses and to follow
-and execute deeper paths as paths and parameters are matched.</p>
+                            <h2>What is Bullet?</h2>
+
+<p>Bullet is a PHP micro-framework that helps you easily create REST APIs and web
+applications that automatically conform to the requirements of the
+<a href="http://www.ietf.org/rfc/rfc2616.txt">HTTP specifiction</a>. Bullet is resource
+and URI-oriented and comes pre-loaded with powerful HTTP features like
+content-negotiation and caching.</p>
 
 <h2>Requirements</h2>
 
@@ -43,26 +45,20 @@ autoloading (may require command-line access)</li>
 
 <ul>
 <li>Apps are <strong>built around HTTP URIs</strong> and defined paths, not forced MVC
-(but MVC-style separation of concerns is still highly recommenended and
+(but MVC-style <a href="/docs/organization">code organization</a> is still highly recommenended and
 encouraged)</li>
 <li>Bullet handles <strong>one segment of the path at a time</strong>, and executes the
 callback for that path segment before proceesing to the next segment 
 (path callbacks are executed from left to right, until the entire path
 is consumed).</li>
-<li>If the entire path cannot be consumed, a 404 error will be returned
-(note that some callbacks may have been executed before Bullet can
-know this due to the nature of callbacks and closures). Example: path
-<code>/events/45/edit</code> may return a 404 because there is no <code>edit</code> path
-callback, but paths <code>events</code> and <code>45</code> would have already been executed
-before Bullet can know to return a 404. This is why all your primary
-logic should be contained in <code>get</code>, <code>post</code>, or other method callbacks
-or in the model layer (and not in the bare <code>path</code> handlers).</li>
+<li>If the entire path cannot be consumed, a <code>404</code> error will be returned (path
+was not found).</li>
 <li>If the path can be fully consumed, and HTTP method handlers are present
-in the path but none are matched, a 405 &#8220;Method Not Allowed&#8221; response
-will be returned.</li>
+in the path but none are matched, a <code>405</code> &#8220;Method Not Allowed&#8221; response
+will be returned (if the request is a POST, but you only have a GET handler).</li>
 <li>If the path can be fully consumed, and format handlers are present in
-the path but none are matched, a 406 &#8220;Not Acceptable&#8221; response will
-be returned.</li>
+the path but none are matched, a <code>406</code> &#8220;Not Acceptable&#8221; response will
+be returned (if &#8216;xml&#8217; is requested, but you only have a &#8216;json&#8217; handler).</li>
 </ul>
 
 <h2>Advantages</h2>
@@ -75,7 +71,7 @@ method on that URL. Routes are not restricted to specific patterns or URL
 formats, and do not require a controller with specific method names to
 respond to specific HTTP methods. You can nest routes as many levels deep as
 you want to expose nested resources like <code>posts/42/comments/943/edit</code> with a
-level of ease not found in most other routing libraries or frameworks.</p></li>
+level of ease and elegance not found elsewhere.</p></li>
 <li><p><strong>Reduced code duplication (DRY)</strong>. Bullet takes full advantage of its nested
 closure routing system to reduce a lot of typical code duplication required
 in most other frameworks. In a typical MVC framework controller, some code
@@ -103,7 +99,7 @@ contain all the logic for the action you want to perform.</p>
 <p>This type of unique callback nesting eliminates repetitive code for
 loading records, checking authentication, and performing other setup
 work found in typical MVC frameworks or other microframeworks where each
-callback or action is in a separate scope or controller method.</p>
+callback or action is in a separate scope or class method.</p>
 
 <pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
     <span style="color: #0000ff;">'template.cfg'</span> <span style="color: #339933;">=&gt;</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'path'</span> <span style="color: #339933;">=&gt;</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/templates'</span><span style="color: #009900;">&#41;</span>
@@ -290,6 +286,8 @@ seeing <a href="https://github.com/joshbuddy">@joshbuddy</a> give a presentation
                     <li><a href="/docs/install">Installation Guide</a>
                     <li><a href="/docs/organization">Project Organization</a>
                     <li><a href="/docs/events">Event Handling</a>
+                    <li><a href="/docs/path-callbacks-handlers">Path Callbacks &amp; Handlers</a>
+                    <li><a href="/docs/param-callbacks">Param Callbacks</a>
                     <li><a href="/docs/templates">Templates &amp; Views</a>
                     <li><a href="/docs/sub-requests">Nested Sub-Requests</a>
                     <li><a href="/docs/request">Request</a>

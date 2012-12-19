@@ -1,0 +1,112 @@
+---
+title: Path and Handler Callbacks
+---
+
+## Path Callbacks and Handlers
+
+Understanding path callbacks and handlers is key to understanding how Bullet
+parses requests and how it tries to respond to them. Path callbacks are always
+matched first, and then handlers are executed once the path has been fully
+consumed and their criteria has been met.
+
+## Path Callbacks
+
+In your application built with Bullet, a **path callback** is what you will
+use to structure your URLs and organize your code. Path callbacks are what
+Bullet is looking for when trying to respond to a particular request URI.
+In terms of code, path callbacks will use the `path` and `param` methods on
+the main Bullet application object.
+
+The `path` method matches an exact static path name, and the `param` method
+matches the path based on a registered callback. There are lots of
+pre-registered [param callbacks](/docs/param-callbacks) and it's easy to add
+your own custom ones too.
+
+The following example matches `posts/235`, but not `posts/my-post-title`.
+{% geshi 'php' %}
+$app->path('posts', function($request) use($app) {
+    $app->param('int', function($request, $postId) use($app) {
+        return "Post: " . $postId;
+    });
+});
+{% endgeshi %}
+
+<div class="alert alert-info">
+Path callbacks are only concerned with
+matching the URI segment itself, and have no other matching rules or context.
+</div>
+
+## Handlers
+
+Handlers are what Bullet uses to send an HTTP response once a path has been
+fully matched. Handler methods are `get`, `post`, `put`, `delete`, `patch`,
+`method`, and `format`. Handler methods are what you should use to contain most
+of your application logic, because handler methods will never be executed unless
+the full URI has already been matched.
+
+In this example, a `GET /posts/12` will only execute the second `get` handler.
+The first `get` handler will be ignored because the path was not fully matched
+at that point (only `posts` and not the full `posts/12`), and the `post` handler
+will be ignored because the request does not match that handler's criteria (it
+was a GET request).
+
+{% geshi 'php' %}
+$app->path('posts', function($request) use($app) {
+    // Get posts collection
+    $app->get(function($request, $postId) use($app) {
+        return "GET  /posts";
+    });
+
+    $app->param('int', function($request, $postId) use($app) {
+        // Get single post resource
+        $app->get(function($request) use($app, $postId) {
+            return "GET  /posts/" . $postId;
+        });
+
+        // Update single post resource
+        $app->post(function($request) use($app, $postId) {
+            return "POST  /posts/" . $postId;
+        });
+    });
+});
+{% endgeshi %}
+
+<div class="alert alert-info">
+  Handlers are only matched when the entire URI has been fully consumed, and
+  the handler criteria has been matched.
+</div>
+
+Multiple hanlders can be nested, and **all** of them will be executed when the
+path has been fully consumed. The most common use for this is combining both an
+HTTP method handler and a format handler. An example `GET /posts` with an HTTP
+header `Accept: application/json` would match the _json_ format handler.
+
+{% geshi 'php' %}
+$app->path('posts', function($request) use($app) {
+    $app->get(function($request, $postId) use($app) {
+        // Prepare your data ONCE
+        $data = array(
+            array('title' => 'Foo', 'author' => 'Calvin'),
+            array('title' => 'Bar', 'author' => 'Hobbes')
+        );
+
+        // Respond in multiple formats
+        $app->format('json', function($request) use($app, $data) {
+            return $data;
+        });
+        $app->format('html', function($request) use($app, $data) {
+            return $app->template('posts', $data);
+        });
+    });
+});
+{% endgeshi %}
+
+<div class="alert alert-info">
+  Bullet uses automatic content-negotiation to determine the request format by
+  parsing the `Accept` header in the absense of an explicit file extension.
+</div>
+
+Returning the raw array for JSON requests will automatically `json_encode` the
+array and send the appropriate JSON response `Content-Type` header.
+
+
