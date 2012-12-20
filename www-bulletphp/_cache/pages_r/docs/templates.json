@@ -1,1 +1,1 @@
-{"layout":"default","format":"markdown","template_engine":"twig","content_type":"html","title":"View and Templates","blog":"blog","segments":["content"]}
+{"layout":"default","format":"markdown","template_engine":"twig","content_type":"html","title":"Views & Templates","blog":"blog","segments":["content"],"description":"Rendering templates and wrapping layouts with Bullet view responses"}

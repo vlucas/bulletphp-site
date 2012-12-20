@@ -25,28 +25,36 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
 <head>
   <title>";
         // line 14
-        if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($_site_, "title"), "html", null, true);
         if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
         if ((!twig_test_empty($this->getAttribute($_page_, "title")))) {
-            echo " &mdash; ";
             if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
             echo twig_escape_filter($this->env, $this->getAttribute($_page_, "title"), "html", null, true);
+            echo " &mdash; ";
         }
+        if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
+        echo twig_escape_filter($this->env, $this->getAttribute($_site_, "title"), "html", null, true);
         echo "</title>
 \t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>
-\t<meta name=\"description\" content=\"";
+\t";
         // line 16
-        if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($_site_, "description"), "html", null, true);
-        echo "\" />
-\t<meta name=\"author\" content=\"";
+        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+        if ((!twig_test_empty($this->getAttribute($_page_, "description")))) {
+            echo "<meta name=\"description\" content=\"";
+            if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+            echo twig_escape_filter($this->env, $this->getAttribute($_page_, "description"), "html", null, true);
+            echo "\" />";
+        }
         // line 17
-        if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($_site_, "author"), "html", null, true);
-        echo "\" />
-  <link rel=\"stylesheet\" href=\"";
+        echo "\t";
+        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+        if ((!twig_test_empty($this->getAttribute($_page_, "keywords")))) {
+            echo "<meta name=\"keywords\" content=\"";
+            if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
+            echo twig_escape_filter($this->env, $this->getAttribute($_page_, "keywords"), "html", null, true);
+            echo "\" />";
+        }
         // line 18
+        echo "  <link rel=\"stylesheet\" href=\"";
         if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
         echo twig_escape_filter($this->env, $this->getAttribute($_site_, "root"), "html", null, true);
         echo "css/bootstrap.min.css\" type=\"text/css\" media=\"screen, projection\" />
@@ -213,7 +221,7 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
         if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
         echo twig_escape_filter($this->env, $this->getAttribute($_site_, "title"), "html", null, true);
         echo "</a></h1>
-              <h2>The Functional-Style PHP Micro-framework Built for REST APIs</h2>
+              <h2>The functional PHP framework built for REST APIs and Applications</h2>
           ";
     }
 
@@ -298,6 +306,6 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  268 => 6,  258 => 4,  254 => 3,  252 => 2,  239 => 1,  233 => 76,  230 => 75,  222 => 40,  219 => 39,  207 => 29,  204 => 28,  195 => 108,  164 => 79,  162 => 75,  147 => 64,  140 => 61,  135 => 60,  130 => 59,  125 => 58,  120 => 57,  115 => 56,  110 => 55,  105 => 54,  100 => 53,  94 => 51,  89 => 50,  79 => 42,  77 => 39,  68 => 32,  66 => 28,  53 => 19,  48 => 18,  43 => 17,  38 => 16,  20 => 10,  55 => 9,  52 => 8,  44 => 7,  36 => 6,  29 => 4,  26 => 14,  17 => 1,);
+        return array (  276 => 6,  266 => 4,  262 => 3,  260 => 2,  247 => 1,  241 => 76,  238 => 75,  230 => 40,  227 => 39,  215 => 29,  212 => 28,  203 => 108,  172 => 79,  170 => 75,  155 => 64,  148 => 61,  143 => 60,  138 => 59,  133 => 58,  128 => 57,  123 => 56,  118 => 55,  113 => 54,  108 => 53,  102 => 51,  97 => 50,  87 => 42,  85 => 39,  76 => 32,  74 => 28,  61 => 19,  46 => 17,  38 => 16,  20 => 10,  55 => 18,  52 => 8,  44 => 7,  36 => 6,  29 => 4,  26 => 14,  17 => 1,);
     }
 }

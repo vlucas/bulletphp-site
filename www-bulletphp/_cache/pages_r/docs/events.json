@@ -1,1 +1,1 @@
-{"layout":"default","format":"markdown","template_engine":"twig","content_type":"html","title":"Events - Intercepting Requests and Injecting Responses","blog":"blog","segments":["content"]}
+{"layout":"default","format":"markdown","template_engine":"twig","content_type":"html","title":"Events - Intercepting Requests and Injecting Responses","blog":"blog","segments":["content"],"description":"Using events to intercept requests and inject custom responses","keywords":"bullet events, bullet error page, bullet exception handler"}
