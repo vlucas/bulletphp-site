@@ -27,7 +27,7 @@
 
 <p>Bullet is a functional PHP micro-framework that helps you easily create REST
 APIs and web applications that automatically conform to the requirements of the
-<a href="http://www.ietf.org/rfc/rfc2616.txt">HTTP specifiction</a>. Bullet is resource
+<a href="http://www.ietf.org/rfc/rfc2616.txt">HTTP specification</a>. Bullet is resource
 and URI-oriented and comes pre-loaded with powerful HTTP features like
 content-negotiation and caching.</p>
 
@@ -43,7 +43,7 @@ autoloading (may require command-line access)</li>
 
 <ul>
 <li>Apps are <strong>built around HTTP URIs</strong> and defined paths, not forced MVC
-(but MVC-style <a href="/docs/organization">code organization</a> is still highly recommenended and
+(but MVC-style <a href="/docs/organization">code organization</a> is still highly recommended and
 encouraged)</li>
 <li>Bullet handles <strong>one segment of the path at a time</strong>, and executes the
 callback for that path segment before proceesing to the next segment 
@@ -86,7 +86,7 @@ need before you define other nested paths and <code>use</code> them when require
 
 <p>Bullet is not your typical PHP micro framework. Instead of defining a full
 path pattern or a typical URL route with a callback and parameters mapped
-to a REST method (GET, POST, etc.), Bullet parses only ONE URL segement
+to a REST method (GET, POST, etc.), Bullet parses only ONE URL segment
 at a time, and only has two methods for working with paths: <code>path</code> and
 <code>param</code>. As you may have guessed, <code>path</code> is for static path names like
 &#8220;blog&#8221; or &#8220;events&#8221; that won&#8217;t change, and <code>param</code> is for variable path
@@ -178,8 +178,8 @@ callbacks, as well as other paths, more parameters, etc.</p>
             <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">'delete_'</span> <span style="color: #339933;">.</span> <span style="color: #000088;">$id</span><span style="color: #339933;">;</span>
         <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
     <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
-    <span style="color: #666666; font-style: italic;">// All printable characters except space</span>
-    <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'ctype_graph'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">,</span> <span style="color: #000088;">$slug</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #666666; font-style: italic;">// URL slug (alphanumeric with dashes and underscores)</span>
+    <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'slug'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">,</span> <span style="color: #000088;">$slug</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
         <span style="color: #b1b100;">return</span> <span style="color: #000088;">$slug</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'my-post-title'</span>
     <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
 <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
@@ -187,9 +187,9 @@ callbacks, as well as other paths, more parameters, etc.</p>
 <span style="color: #666666; font-style: italic;">// Results of above code</span>
 <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'GET'</span><span style="color: #339933;">,</span>   <span style="color: #0000ff;">'/posts/42'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'view_42'</span>
 <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'PUT'</span><span style="color: #339933;">,</span>   <span style="color: #0000ff;">'/posts/42'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'update_42'</span>
-<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'DELTE'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'/posts/42'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'delete_42'</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'DELETE'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'/posts/42'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'delete_42'</span>
 &nbsp;
-<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'DELTE'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'/posts/my-post-title'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'my-post-title'</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'DELETE'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'/posts/my-post-title'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'my-post-title'</span>
 &nbsp;</pre>
 
 <h2>Returning JSON (Useful for PHP JSON APIs)</h2>

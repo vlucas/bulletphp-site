@@ -9,7 +9,7 @@ What is Bullet?
 
 Bullet is a functional PHP micro-framework that helps you easily create REST
 APIs and web applications that automatically conform to the requirements of the
-[HTTP specifiction](http://www.ietf.org/rfc/rfc2616.txt). Bullet is resource
+[HTTP specification](http://www.ietf.org/rfc/rfc2616.txt). Bullet is resource
 and URI-oriented and comes pre-loaded with powerful HTTP features like
 content-negotiation and caching.
 
@@ -24,7 +24,7 @@ Rules
 -----
 
  * Apps are **built around HTTP URIs** and defined paths, not forced MVC
-   (but MVC-style [code organization](/docs/organization) is still highly recommenended and
+   (but MVC-style [code organization](/docs/organization) is still highly recommended and
    encouraged)
  * Bullet handles **one segment of the path at a time**, and executes the
    callback for that path segment before proceesing to the next segment 
@@ -67,7 +67,7 @@ Syntax
 
 Bullet is not your typical PHP micro framework. Instead of defining a full
 path pattern or a typical URL route with a callback and parameters mapped
-to a REST method (GET, POST, etc.), Bullet parses only ONE URL segement
+to a REST method (GET, POST, etc.), Bullet parses only ONE URL segment
 at a time, and only has two methods for working with paths: `path` and
 `param`. As you may have guessed, `path` is for static path names like
 "blog" or "events" that won't change, and `param` is for variable path
@@ -161,8 +161,8 @@ $app->path('posts', function($request) use($app) {
             return 'delete_' . $id;
         });
     });
-    // All printable characters except space
-    $app->param('ctype_graph', function($request, $slug) use($app) {
+    // URL slug (alphanumeric with dashes and underscores)
+    $app->param('slug', function($request, $slug) use($app) {
         return $slug; // 'my-post-title'
     });
 });
@@ -170,9 +170,9 @@ $app->path('posts', function($request) use($app) {
 // Results of above code
 echo $app->run('GET',   '/posts/42'); // 'view_42'
 echo $app->run('PUT',   '/posts/42'); // 'update_42'
-echo $app->run('DELTE', '/posts/42'); // 'delete_42'
+echo $app->run('DELETE', '/posts/42'); // 'delete_42'
 
-echo $app->run('DELTE', '/posts/my-post-title'); // 'my-post-title'
+echo $app->run('DELETE', '/posts/my-post-title'); // 'my-post-title'
 {% endgeshi %}
 
 Returning JSON (Useful for PHP JSON APIs)
