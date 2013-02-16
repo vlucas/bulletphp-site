@@ -85,6 +85,83 @@ is literally a form of an HTTP response in Bullet).</p>
 <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
 &nbsp;</pre>
 
+<h3>Template Contents</h3>
+
+<p>Templates will have local variables set that match the names of the variables
+that are passed to them. The <code>-&gt;set(array('name' =&gt; 'World'))</code> call will make
+the variable <code>$name</code> available inside the template.</p>
+
+<p><code>src/templates/hello.html.php</code>
+<pre class="php" style="font-family:monospace;">&lt;p&gt;Hello, <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$name</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>!&lt;/p&gt;
+&nbsp;</pre></p>
+
+<h3>Layout Contents</h3>
+
+<p>Layouts have a special variable <code>$yield</code> that holds the template content. You
+can use this variable to render the template content inside your layout
+wherever you want it to go.</p>
+
+<p><code>src/templates/layouts/auth.html.php</code>
+<pre class="php" style="font-family:monospace;">&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Hello World&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div&gt;
+    <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$yield</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&nbsp;</pre></p>
+
+<h2>Template Blocks</h2>
+
+<p>Often you will need to include assets like CSS and JavaScript files or other
+content within template files that need to be made available in layouts. Blocks
+allow you to achieve this. Content can be added to blocks using 3 different
+methods, depending on your desired result: <code>content</code>, <code>append</code>, and <code>prepend</code>.</p>
+
+<h3>Template Contents</h3>
+
+<p>Templates can define blocks with content (without an <code>echo</code> statement) that
+will be set in the block content and then later rendered in the layout or
+another template that it is nested in. Note that <code>content</code> will clear any
+previously set content, so if you want to add a stack of things to a block
+from several different templates, use <code>append</code> or <code>prepend</code> instead.</p>
+
+<p><code>src/templates/awesome.html.php</code>
+<pre class="php" style="font-family:monospace;">&lt;p&gt;I need a custom javascript on this page because it's awesome.&lt;/p&gt;
+<span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #000088;">$view</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">block</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'js'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">content</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://www.cornify.com/js/cornify.js&quot;&gt;&lt;/script&gt;
+<span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+&nbsp;</pre></p>
+
+<h3>Layout Contents</h3>
+
+<p>This layout prints the content of two blocks - one named <code>css</code> and one named
+<code>js</code>. The <code>css</code> block uses prepend with the global site styles so that the
+content defined here will appear before any other content added by templates.</p>
+
+<p><code>src/templates/layouts/application.html.php</code>
+<pre class="php" style="font-family:monospace;">&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Hello World&lt;/title&gt;
+  <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$view</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">block</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'css'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">prepend</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+    &lt;style type=&quot;text/css&quot; href=&quot;/assets/styles/site.css&quot; /&gt;
+  <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div&gt;
+    <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$yield</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+  &lt;/div&gt;
+  <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$view</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">block</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'js'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
+&nbsp;</pre>
+Note that the block does not have to be defined beforehand for the set content
+to be displayed. In this example, the <code>css</code> block is never used first in the
+template, but the content set here will be displayed normally without errors.</p>
+
                       </div>
         </div>
 

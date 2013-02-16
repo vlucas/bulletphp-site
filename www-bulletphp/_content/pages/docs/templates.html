@@ -68,3 +68,84 @@ $app->path('/', function($request) use($app) {
 });
 {% endgeshi %}
 
+### Template Contents
+
+Templates will have local variables set that match the names of the variables
+that are passed to them. The `->set(array('name' => 'World'))` call will make
+the variable `$name` available inside the template.
+
+`src/templates/hello.html.php`
+{% geshi 'php' %}
+<p>Hello, <?php echo $name; ?>!</p>
+{% endgeshi %}
+
+### Layout Contents
+
+Layouts have a special variable `$yield` that holds the template content. You
+can use this variable to render the template content inside your layout
+wherever you want it to go.
+
+`src/templates/layouts/auth.html.php`
+{% geshi 'php' %}
+<html>
+<head>
+  <title>Hello World</title>
+</head>
+<body>
+  <div>
+    <?php echo $yield; ?>
+  </div>
+</body>
+</html>
+{% endgeshi %}
+
+## Template Blocks
+
+Often you will need to include assets like CSS and JavaScript files or other
+content within template files that need to be made available in layouts. Blocks
+allow you to achieve this. Content can be added to blocks using 3 different
+methods, depending on your desired result: `content`, `append`, and `prepend`.
+
+### Template Contents
+
+Templates can define blocks with content (without an `echo` statement) that
+will be set in the block content and then later rendered in the layout or
+another template that it is nested in. Note that `content` will clear any
+previously set content, so if you want to add a stack of things to a block
+from several different templates, use `append` or `prepend` instead.
+
+`src/templates/awesome.html.php`
+{% geshi 'php' %}
+<p>I need a custom javascript on this page because it's awesome.</p>
+<?php $view->block('js')->content(function() { ?>
+<script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+<?php }); ?>
+{% endgeshi %}
+
+### Layout Contents
+
+This layout prints the content of two blocks - one named `css` and one named
+`js`. The `css` block uses prepend with the global site styles so that the
+content defined here will appear before any other content added by templates.
+
+`src/templates/layouts/application.html.php`
+{% geshi 'php' %}
+<html>
+<head>
+  <title>Hello World</title>
+  <?php echo $view->block('css')->prepend(function() { ?>
+    <style type="text/css" href="/assets/styles/site.css" />
+  <?php }); ?>
+</head>
+<body>
+  <div>
+    <?php echo $yield; ?>
+  </div>
+  <?php echo $view->block('js'); ?>
+</body>
+</html>
+{% endgeshi %}
+
+Note that the block does not have to be defined beforehand for the set content
+to be displayed. In this example, the `css` block is never used first in the
+template, but the content set here will be displayed normally without errors.

@@ -1,0 +1,1 @@
+[{"content":"Posts in category '{{ category }}'\r\n\r\n{% for post in pagination.posts %}\r\n{% include 'partial_post.html' %}\r\n{% endfor %}\r\n","format":null}]
