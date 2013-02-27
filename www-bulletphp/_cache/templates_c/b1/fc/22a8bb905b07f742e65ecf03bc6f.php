@@ -25,43 +25,34 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
 <head>
   <title>";
         // line 14
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        if ((!twig_test_empty($this->getAttribute($_page_, "title")))) {
-            if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-            echo twig_escape_filter($this->env, $this->getAttribute($_page_, "title"), "html", null, true);
+        if ((!twig_test_empty($this->getAttribute((isset($context["page"]) ? $context["page"] : null), "title")))) {
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "title"), "html", null, true);
             echo " &mdash; ";
         }
-        if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($_site_, "title"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["site"]) ? $context["site"] : null), "title"), "html", null, true);
         echo "</title>
 \t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>
 \t";
         // line 16
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        if ((!twig_test_empty($this->getAttribute($_page_, "description")))) {
+        if ((!twig_test_empty($this->getAttribute((isset($context["page"]) ? $context["page"] : null), "description")))) {
             echo "<meta name=\"description\" content=\"";
-            if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-            echo twig_escape_filter($this->env, $this->getAttribute($_page_, "description"), "html", null, true);
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "description"), "html", null, true);
             echo "\" />";
         }
         // line 17
         echo "\t";
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        if ((!twig_test_empty($this->getAttribute($_page_, "keywords")))) {
+        if ((!twig_test_empty($this->getAttribute((isset($context["page"]) ? $context["page"] : null), "keywords")))) {
             echo "<meta name=\"keywords\" content=\"";
-            if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-            echo twig_escape_filter($this->env, $this->getAttribute($_page_, "keywords"), "html", null, true);
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "keywords"), "html", null, true);
             echo "\" />";
         }
         // line 18
         echo "  <link rel=\"stylesheet\" href=\"";
-        if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($_site_, "root"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["site"]) ? $context["site"] : null), "root"), "html", null, true);
         echo "css/bootstrap.min.css\" type=\"text/css\" media=\"screen, projection\" />
   <link rel=\"stylesheet\" href=\"";
         // line 19
-        if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($_site_, "root"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["site"]) ? $context["site"] : null), "root"), "html", null, true);
         echo "css/site.css\" type=\"text/css\" media=\"screen, projection\" />
 </head>
 <body>
@@ -96,66 +87,58 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
               <ul class=\"nav nav-list\">
                 <li>";
         // line 50
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "", 1 => $this->getAttribute($_page_, "slug"), 2 => "Home"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Home"), "method"), "html", null, true);
         echo "</li>
                 <li>";
         // line 51
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs", 1 => $this->getAttribute($_page_, "slug"), 2 => "Documentation"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Documentation"), "method"), "html", null, true);
         echo "
                   <ul>
                     <li>";
         // line 53
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/install", 1 => $this->getAttribute($_page_, "slug"), 2 => "Installation Guide"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/install", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Installation Guide"), "method"), "html", null, true);
         echo "
                     <li>";
         // line 54
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/organization", 1 => $this->getAttribute($_page_, "slug"), 2 => "Project Organization"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/organization", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Project Organization"), "method"), "html", null, true);
         echo "
                     <li>";
         // line 55
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/events", 1 => $this->getAttribute($_page_, "slug"), 2 => "Event Handling"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/events", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Event Handling"), "method"), "html", null, true);
         echo "
                     <li>";
         // line 56
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/path-callbacks-handlers", 1 => $this->getAttribute($_page_, "slug"), 2 => "Path Callbacks & Handlers"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/path-callbacks-handlers", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Path Callbacks & Handlers"), "method"), "html", null, true);
         echo "
                     <li>";
         // line 57
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/param-callbacks", 1 => $this->getAttribute($_page_, "slug"), 2 => "Param Callbacks"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/param-callbacks", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Param Callbacks"), "method"), "html", null, true);
         echo "
                     <li>";
         // line 58
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/templates", 1 => $this->getAttribute($_page_, "slug"), 2 => "Templates & Views"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/templates", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Templates & Views"), "method"), "html", null, true);
         echo "
                     <li>";
         // line 59
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/sub-requests", 1 => $this->getAttribute($_page_, "slug"), 2 => "Nested Sub-Requests"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/sub-requests", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Nested Sub-Requests"), "method"), "html", null, true);
         echo "
                     <li>";
         // line 60
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/request", 1 => $this->getAttribute($_page_, "slug"), 2 => "Request"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/request", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Request"), "method"), "html", null, true);
         echo "
                     <li>";
         // line 61
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/response", 1 => $this->getAttribute($_page_, "slug"), 2 => "Response"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/response", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Response"), "method"), "html", null, true);
         echo "
                   </ul>
-                </li>
+                </l>
                 <li>";
         // line 64
-        if (isset($context["page"])) { $_page_ = $context["page"]; } else { $_page_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "blog", 1 => $this->getAttribute($_page_, "slug"), 2 => "Blog"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "examples-users", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Examples & Uses"), "method"), "html", null, true);
+        echo "
+                <li>";
+        // line 65
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "blog", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Blog"), "method"), "html", null, true);
         echo "</li>
               </ul>
             </div>
@@ -168,9 +151,9 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
           <div id=\"region_foot\" class=\"span9\">
             <div class=\"inside\">
               ";
-        // line 75
+        // line 76
         $this->displayBlock('footer', $context, $blocks);
-        // line 79
+        // line 80
         echo "            </div>
           </div>
           <div class=\"span3 right\">
@@ -201,9 +184,8 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
     </script>
 
 \t";
-        // line 108
-        if (isset($context["piecrust"])) { $_piecrust_ = $context["piecrust"]; } else { $_piecrust_ = null; }
-        echo $this->getAttribute($_piecrust_, "debug_info");
+        // line 109
+        echo $this->getAttribute((isset($context["piecrust"]) ? $context["piecrust"] : null), "debug_info");
         echo "
 </body>
 </html>
@@ -215,11 +197,9 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
     {
         // line 29
         echo "              <h1><a href=\"";
-        if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($_site_, "root"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["site"]) ? $context["site"] : null), "root"), "html", null, true);
         echo "\">";
-        if (isset($context["site"])) { $_site_ = $context["site"]; } else { $_site_ = null; }
-        echo twig_escape_filter($this->env, $this->getAttribute($_site_, "title"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["site"]) ? $context["site"] : null), "title"), "html", null, true);
         echo "</a></h1>
               <h2>The functional PHP framework built for REST APIs and Applications</h2>
           ";
@@ -230,16 +210,15 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
     {
         // line 40
         echo "                ";
-        if (isset($context["content"])) { $_content_ = $context["content"]; } else { $_content_ = null; }
-        echo $_content_;
+        echo (isset($context["content"]) ? $context["content"] : null);
         echo "
             ";
     }
 
-    // line 75
+    // line 76
     public function block_footer($context, array $blocks = array())
     {
-        // line 76
+        // line 77
         echo "                <p>Using Bullet in an awesome project? <a href=\"http://twitter.com/vlucas\">Let me know</a>!</p>
                 <p>BulletPHP &copy; 2012 <a href=\"http://www.vancelucas.com\">Vance Lucas</a> from <a href=\"http://brightbit.com\">Brightbit</a>. All rights reserved. Open source under the <a href=\"http://www.opensource.org/licenses/bsd-license.php\">BSD license</a>.</p>
               ";
@@ -261,26 +240,20 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
             // line 2
             ob_start();
             // line 3
-            if (isset($context["current"])) { $_current_ = $context["current"]; } else { $_current_ = null; }
-            if (isset($context["slug"])) { $_slug_ = $context["slug"]; } else { $_slug_ = null; }
-            if (($_current_ == $_slug_)) {
+            if (((isset($context["current"]) ? $context["current"] : null) == (isset($context["slug"]) ? $context["slug"] : null))) {
                 // line 4
                 echo "<a class=\"active\" href=\"";
-                if (isset($context["slug"])) { $_slug_ = $context["slug"]; } else { $_slug_ = null; }
-                echo twig_escape_filter($this->env, $this->env->getExtension('piecrust')->getUrl($_slug_), "html", null, true);
+                echo twig_escape_filter($this->env, $this->env->getExtension('piecrust')->getUrl((isset($context["slug"]) ? $context["slug"] : null)), "html", null, true);
                 echo "\">";
-                if (isset($context["label"])) { $_label_ = $context["label"]; } else { $_label_ = null; }
-                echo twig_escape_filter($this->env, $_label_, "html", null, true);
+                echo twig_escape_filter($this->env, (isset($context["label"]) ? $context["label"] : null), "html", null, true);
                 echo "</a>
 ";
             } else {
                 // line 6
                 echo "<a href=\"";
-                if (isset($context["slug"])) { $_slug_ = $context["slug"]; } else { $_slug_ = null; }
-                echo twig_escape_filter($this->env, $this->env->getExtension('piecrust')->getUrl($_slug_), "html", null, true);
+                echo twig_escape_filter($this->env, $this->env->getExtension('piecrust')->getUrl((isset($context["slug"]) ? $context["slug"] : null)), "html", null, true);
                 echo "\">";
-                if (isset($context["label"])) { $_label_ = $context["label"]; } else { $_label_ = null; }
-                echo twig_escape_filter($this->env, $_label_, "html", null, true);
+                echo twig_escape_filter($this->env, (isset($context["label"]) ? $context["label"] : null), "html", null, true);
                 echo "</a>
 ";
             }
@@ -306,6 +279,6 @@ class __TwigTemplate_b1fc22a8bb905b07f742e65ecf03bc6f extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  276 => 6,  266 => 4,  262 => 3,  260 => 2,  247 => 1,  241 => 76,  238 => 75,  230 => 40,  227 => 39,  215 => 29,  212 => 28,  203 => 108,  172 => 79,  170 => 75,  155 => 64,  148 => 61,  143 => 60,  138 => 59,  133 => 58,  128 => 57,  123 => 56,  118 => 55,  113 => 54,  108 => 53,  102 => 51,  97 => 50,  87 => 42,  85 => 39,  76 => 32,  74 => 28,  61 => 19,  46 => 17,  38 => 16,  20 => 10,  55 => 18,  52 => 8,  44 => 7,  36 => 6,  29 => 4,  26 => 14,  17 => 1,);
+        return array (  251 => 6,  243 => 4,  241 => 3,  239 => 2,  226 => 1,  220 => 77,  217 => 76,  210 => 40,  207 => 39,  197 => 29,  194 => 28,  186 => 109,  155 => 80,  153 => 76,  139 => 65,  135 => 64,  129 => 61,  125 => 60,  121 => 59,  117 => 58,  113 => 57,  109 => 56,  105 => 55,  101 => 54,  97 => 53,  92 => 51,  88 => 50,  78 => 42,  76 => 39,  67 => 32,  65 => 28,  53 => 19,  48 => 18,  41 => 17,  35 => 16,  26 => 14,  20 => 10,  17 => 1,);
     }
 }
