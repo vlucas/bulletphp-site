@@ -15,6 +15,157 @@ $app->path('test', function($request) use($app) {
     $app->post(function($request) use($app) {
         var_dump($request->post());
     });
-});
-{% endgeshi %}
+}); {% endgeshi %}
+
+## Accessing Request Parameters
+
+This section covers how to access variables passed in the HTTP request, and
+from which sources.
+
+### General Request Variables
+
+Variables given from **all sources**, in the following order: User-set params,
+GET, POST, COOKIE, SERVER, ENV.
+
+{% geshi 'php' %}
+$request->page;
+$request->get('page', 1); // Default fallback {% endgeshi %}
+
+### Query String Variables
+
+Variables given in the query string (`$_GET`).
+
+{% geshi 'php' %}
+$request->query(); // Array
+$request->query('page'); // Single value
+$request->query('page', 1); // Default fallback {% endgeshi %}
+
+### Post Variables
+
+Variables defined in an HTTP POST request (`$_POST`).
+
+{% geshi 'php' %}
+$request->post(); // Array
+$request->post('subject'); // Single value
+$request->post('subject', '[ No Subject ]'); // Default fallback {% endgeshi %}
+
+### Cookies
+
+Variables defined in an cookies (`$_COOKIE`).
+
+{% geshi 'php' %}
+$request->cookie(); // Array
+$request->cookie('hide_annoying_notifications'); // Single value
+$request->cookie('hide_annoying_notifications', 0); // Default {% endgeshi %}
+
+### Server/PHP Variables
+
+Variables defined by the server and PHP (`$_SERVER`).
+
+{% geshi 'php' %}
+$request->server(); // Array
+$request->server('REQUEST_TIME'); // Single value
+$request->server('REQUEST_TIME', time()); // Value with default {% endgeshi %}
+
+### Environment Variables
+
+Variables defined by the environment (`$_ENV`).
+
+{% geshi 'php' %}
+$request->env(); // Array
+$request->env('ULTIMATE_ANSWER'); // Single value
+$request->env('ULTIMATE_ANSWER', 42); // Value with default {% endgeshi %}
+
+## User Set Variables
+
+Any values set on the request object will be stored separately in a special
+"params" array so that it does not override or replace the actual data from
+the original HTTP request.
+
+### Setting
+
+Set a custom value by simply setting a new property on the `$response` object.
+
+{% geshi 'php' %}
+$request->user_id = 64; {% endgeshi %}
+
+### Getting
+
+Get your custom property by either accessing the property directly, or via the
+`param` method, just like the other getter methods for request data.
+
+{% geshi 'php' %}
+$request->param(); // Array
+$request->user_id; // Single value (checks user params first)
+$request->param('user_id'); // Single value via method
+$request->param('user_id', 0); // Value with default {% endgeshi %}
+
+## Processing JSON Payloads
+
+If you do a POST or PUT request with a JSON body instead of a form url-encoded
+body, Bullet will automatically run `json_decode` on the request body, and set
+the top-level variables to the `$request` object. The data can then be directly
+accessed with `$request->foo`, etc.
+
+Given the JSON request body:
+
+{% geshi 'json' %}
+{
+  "foo": "bar",
+  "bar": "baz",
+  "answer": 42,
+  "user": {
+    "id": 32,
+    "name" Testy A. McTester"
+  }
+} {% endgeshi %}
+
+The data would be available to you from the request object:
+
+ * `$request->foo` == `bar`
+ * `$request->answer` == `42`
+ * `$request->get('user.name')` == `Testy A. McTester`
+
+If you need to parse the JSON a different way or if you need the raw JSON
+itself, use `$request->raw()`. This will contain the raw, unfiltered and
+unparsed request body.
+
+## Raw Request Body
+
+The raw, unfiltered request body can be accessed directly if you need to parse
+it a custom way or handle it differently than Bullet does.
+
+    $request->raw();
+
+## HTTP Request Data
+
+Convenience methods to return information about the current HTTP request.
+
+ * `$request->uri()` - REQUEST_URI from $_SERVER
+ * `$request->url()` - Request URL that Bullet recognizes and uses
+ * `$request->format()` - Request format (html, json, xml, etc.)
+ * `$request->method()` - Request method (get, post, put, etc.)
+ * `$request->scheme()` - Scheme (http, https, cli)
+ * `$request->subdomain()` - Subdomain (domain part until first dot)
+ * `$request->host()` - HTTP_HOST
+ * `$request->port()` - Port (usually 80, or 443 for SSL)
+ * `$request->ip()` - User's IP address
+
+## Deterministic Helpers
+
+Helper methods to determine what type of request was made.
+
+ * `$request->isGet()` - GET request
+ * `$request->isPost()` - POST request
+ * `$request->isPut()` - PUT request
+ * `$request->isDelete()` - DELETE request
+ * `$request->isPatch()` - PATCH request
+ * `$request->isHead()` - HEAD request
+ * `$request->isOptions()` - OPTIONS request
+ * `$request->isSecure()` - Secure HTTPS request
+ * `$request->isAjax()` - XMLHttpRequest (from jQuery, Prototype, etc.)
+ * `$request->isMobile()` - From mobile phone/device
+ * `$request->isBot()` - Crawler bot (Google, Yahoo, MSN, etc.)
+ * `$request->isCli()` - Command-Line Request
+ * `$request->isFlash()` - From Flash/Shockwave
 

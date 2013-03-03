@@ -35,8 +35,157 @@ query string variables, etc.</p>
     <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
         <a href="http://www.php.net/var_dump"><span style="color: #990000;">var_dump</span></a><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
     <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
-<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
-&nbsp;</pre>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> </pre>
+
+<h2>Accessing Request Parameters</h2>
+
+<p>This section covers how to access variables passed in the HTTP request, and
+from which sources.</p>
+
+<h3>General Request Variables</h3>
+
+<p>Variables given from <strong>all sources</strong>, in the following order: User-set params,
+GET, POST, COOKIE, SERVER, ENV.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">page</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">get</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'page'</span><span style="color: #339933;">,</span> <span style="color: #cc66cc;">1</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Default fallback </span></pre>
+
+<h3>Query String Variables</h3>
+
+<p>Variables given in the query string (<code>$_GET</code>).</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">query</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Array</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">query</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'page'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Single value</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">query</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'page'</span><span style="color: #339933;">,</span> <span style="color: #cc66cc;">1</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Default fallback </span></pre>
+
+<h3>Post Variables</h3>
+
+<p>Variables defined in an HTTP POST request (<code>$_POST</code>).</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Array</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'subject'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Single value</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'subject'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'[ No Subject ]'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Default fallback </span></pre>
+
+<h3>Cookies</h3>
+
+<p>Variables defined in an cookies (<code>$_COOKIE</code>).</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">cookie</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Array</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">cookie</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'hide_annoying_notifications'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Single value</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">cookie</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'hide_annoying_notifications'</span><span style="color: #339933;">,</span> <span style="color: #cc66cc;">0</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Default </span></pre>
+
+<h3>Server/PHP Variables</h3>
+
+<p>Variables defined by the server and PHP (<code>$_SERVER</code>).</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">server</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Array</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">server</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'REQUEST_TIME'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Single value</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">server</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'REQUEST_TIME'</span><span style="color: #339933;">,</span> <a href="http://www.php.net/time"><span style="color: #990000;">time</span></a><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Value with default </span></pre>
+
+<h3>Environment Variables</h3>
+
+<p>Variables defined by the environment (<code>$_ENV</code>).</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">env</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Array</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">env</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'ULTIMATE_ANSWER'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Single value</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">env</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'ULTIMATE_ANSWER'</span><span style="color: #339933;">,</span> <span style="color: #cc66cc;">42</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Value with default </span></pre>
+
+<h2>User Set Variables</h2>
+
+<p>Any values set on the request object will be stored separately in a special
+&#8220;params&#8221; array so that it does not override or replace the actual data from
+the original HTTP request.</p>
+
+<h3>Setting</h3>
+
+<p>Set a custom value by simply setting a new property on the <code>$response</code> object.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">user_id</span> <span style="color: #339933;">=</span> <span style="color: #cc66cc;">64</span><span style="color: #339933;">;</span> </pre>
+
+<h3>Getting</h3>
+
+<p>Get your custom property by either accessing the property directly, or via the
+<code>param</code> method, just like the other getter methods for request data.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Array</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">user_id</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Single value (checks user params first)</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'user_id'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Single value via method</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'user_id'</span><span style="color: #339933;">,</span> <span style="color: #cc66cc;">0</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Value with default </span></pre>
+
+<h2>Processing JSON Payloads</h2>
+
+<p>If you do a POST or PUT request with a JSON body instead of a form url-encoded
+body, Bullet will automatically run <code>json_decode</code> on the request body, and set
+the top-level variables to the <code>$request</code> object. The data can then be directly
+accessed with <code>$request-&gt;foo</code>, etc.</p>
+
+<p>Given the JSON request body:</p>
+
+<pre class="json" style="font-family:monospace;">{
+  &quot;foo&quot;: &quot;bar&quot;,
+  &quot;bar&quot;: &quot;baz&quot;,
+  &quot;answer&quot;: 42,
+  &quot;user&quot;: {
+    &quot;id&quot;: 32,
+    &quot;name&quot; Testy A. McTester&quot;
+  }
+} </pre>
+
+<p>The data would be available to you from the request object:</p>
+
+<ul>
+<li><code>$request-&gt;foo</code> == <code>bar</code></li>
+<li><code>$request-&gt;answer</code> == <code>42</code></li>
+<li><code>$request-&gt;get('user.name')</code> == <code>Testy A. McTester</code></li>
+</ul>
+
+<p>If you need to parse the JSON a different way or if you need the raw JSON
+itself, use <code>$request-&gt;raw()</code>. This will contain the raw, unfiltered and
+unparsed request body.</p>
+
+<h2>Raw Request Body</h2>
+
+<p>The raw, unfiltered request body can be accessed directly if you need to parse
+it a custom way or handle it differently than Bullet does.</p>
+
+<pre><code>$request-&gt;raw();
+</code></pre>
+
+<h2>HTTP Request Data</h2>
+
+<p>Convenience methods to return information about the current HTTP request.</p>
+
+<ul>
+<li><code>$request-&gt;uri()</code> - REQUEST<em>URI from $</em>SERVER</li>
+<li><code>$request-&gt;url()</code> - Request URL that Bullet recognizes and uses</li>
+<li><code>$request-&gt;format()</code> - Request format (html, json, xml, etc.)</li>
+<li><code>$request-&gt;method()</code> - Request method (get, post, put, etc.)</li>
+<li><code>$request-&gt;scheme()</code> - Scheme (http, https, cli)</li>
+<li><code>$request-&gt;subdomain()</code> - Subdomain (domain part until first dot)</li>
+<li><code>$request-&gt;host()</code> - HTTP_HOST</li>
+<li><code>$request-&gt;port()</code> - Port (usually 80, or 443 for SSL)</li>
+<li><code>$request-&gt;ip()</code> - User&#8217;s IP address</li>
+</ul>
+
+<h2>Deterministic Helpers</h2>
+
+<p>Helper methods to determine what type of request was made.</p>
+
+<ul>
+<li><code>$request-&gt;isGet()</code> - GET request</li>
+<li><code>$request-&gt;isPost()</code> - POST request</li>
+<li><code>$request-&gt;isPut()</code> - PUT request</li>
+<li><code>$request-&gt;isDelete()</code> - DELETE request</li>
+<li><code>$request-&gt;isPatch()</code> - PATCH request</li>
+<li><code>$request-&gt;isHead()</code> - HEAD request</li>
+<li><code>$request-&gt;isOptions()</code> - OPTIONS request</li>
+<li><code>$request-&gt;isSecure()</code> - Secure HTTPS request</li>
+<li><code>$request-&gt;isAjax()</code> - XMLHttpRequest (from jQuery, Prototype, etc.)</li>
+<li><code>$request-&gt;isMobile()</code> - From mobile phone/device</li>
+<li><code>$request-&gt;isBot()</code> - Crawler bot (Google, Yahoo, MSN, etc.)</li>
+<li><code>$request-&gt;isCli()</code> - Command-Line Request</li>
+<li><code>$request-&gt;isFlash()</code> - From Flash/Shockwave</li>
+</ul>
 
                       </div>
         </div>
