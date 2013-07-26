@@ -18,19 +18,25 @@ stays sane - even if that just means you.
 ## Folder Organization
 
 Typically, it is desireable to setup your project with a few different top-level
-directories that contain your different main content types. An example might be:
+directories that contain your different main content types, and a single
+web-accessible folder that contains the main index.php and all the frontend
+files.
 
- * `assets` - All your frontend asset files like images, CSS, and javascript
-    * `images` - Image files
-    * `scripts` - JavaScript files
-    * `styles` - CSS/Stylesheets
- * `lib` - Any custom libraries created specifically for this project
- * `src` - All route files and anything related to this application
+The ideal project setup is provided in the [bullet example skeleton app](https://github.com/vlucas/bulletphp-skeleton)
+and looks like this:
+
+ * `app` - All route files and anything related to this application
     * `lang` - Language files, if using I18N
-    * `templates` - Template files
     * `routes` - Route files
+    * `src` - For custom PHP classes. Anything in here is PSR-0 Autoloaded.
+    * `templates` - Template files
  * `test` - Tests for this application (any type)
- * `vendor` - Composer-create folder with Bullet and dependencies
+ * `vendor` - Composer-created folder with Bullet and dependencies
+ * `web` - All web-accessible files
+    * `assets` - All your frontend asset files like images, CSS, and javascript
+      * `images` - Image files
+      * `scripts` - JavaScript files
+      * `styles` - CSS/Stylesheets
 
 ## Route Organization
 
@@ -39,34 +45,33 @@ for different base routes like `posts`, `events`, and `comments` into different
 same-named files, like `posts.php`, `events.php`, and `comments.php`. This is
 very similar to the way you would separate and organize your code in a larger
 MVC framework with controller classes. If you are following the folder structure
-above, these would be placed in `src/routes`. You would then `require` these
-files in your main `index.php` file that serves your Bullet application.
+above, these would be placed in `app/routes`. You would then `require` these
+files in your main `web/index.php` file that serves your Bullet application.
 
 Your main index file would then look something like this:
 
 {% geshi 'php' %}
 <?php
-// Composer Autoloader
-$loader = require __DIR__ . '/vendor/autoload.php';
-$loader->add('Entity', __DIR__ . '/src/'); // Entities
-$loader->add('App', __DIR__ . '/lib/'); // Custom app/lib files
+define('BULLET_ROOT', dirname(__DIR__));
+define('BULLET_APP_ROOT', BULLET_ROOT . '/app/');
+define('BULLET_SRC_ROOT', BULLET_APP_ROOT . '/src/');
 
-// Directories
-$srcDir = __DIR__ . '/src/';
-$routeDir = $srcDir . '/routes/';
+// Composer Autoloader
+$loader = require BULLET_ROOT . '/vendor/autoload.php';
 
 // Bullet App
-$app = new Bullet\App(require $srcDir . 'config.php');
+$app = new Bullet\App(require BULLET_APP_ROOT . 'config.php');
 $request = new Bullet\Request();
 
-// Common include (db connection, setup, common objects, etc.)
-require $srcDir . '/common.php';
+// Common include
+require BULLET_APP_ROOT . '/common.php';
 
 // Require all paths/routes
-require $routeDir . 'index.php';
-require $routeDir . 'events.php';
-require $routeDir . 'posts.php';
-require $routeDir . 'users.php';
+$routesDir = BULLET_APP_ROOT . '/routes/';
+require $routesDir . 'index.php';
+require $routesDir . 'events.php';
+require $routesDir . 'messages.php';
+require $routesDir . 'users.php';
 
 // Response
 echo $app->run($request);
