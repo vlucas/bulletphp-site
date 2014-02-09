@@ -92,4 +92,25 @@ HTTP response is sent. The first argument is a template name, and the
 second (optional) argument is an array of parameters to pass to the
 template for use.
 
+### Redirects
+
+{% geshi 'php' %}
+$app->path('foo', function($request) use($app) {
+    return "Hello Foo!"
+});
+
+// 'bar' redirects to  'foo' with a 302 code
+$app->path('bar', function($request) use($app) {
+    return $app->response()->redirect('foo');
+});
+// 'baz' redirects to 'foo' with a 301 code
+$app->path('baz', function($request) use($app) {
+    return $app->response()->redirect('foo', 301);
+});
+{% endgeshi %}
+
+Redirects result in a `302 Found` HTTP response with a `Location:`
+header for the path provided. If you want to send a different status
+code, pass it as the second (optional) argument.
+
 
