@@ -112,6 +112,56 @@ the original HTTP request.</p>
 <span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'user_id'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Single value via method</span>
 <span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'user_id'</span><span style="color: #339933;">,</span> <span style="color: #cc66cc;">0</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Value with default </span></pre>
 
+<h3>Injecting dependencies</h3>
+
+<p>Custom properties are a powerful mechanism for passing dependencies to your
+routes, or for injecting your dependencies with a container like 
+<a href="http://pimple.sensiolabs.org/">Pimple</a>.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #666666; font-style: italic;">// create the Pimple container</span>
+<span style="color: #000088;">$pimple</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Pimple<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// register Pimple injectors for our blog mapper and post creator</span>
+<span style="color: #000088;">$pimple</span><span style="color: #009900;">&#91;</span><span style="color: #0000ff;">'blog'</span><span style="color: #009900;">&#93;</span> <span style="color: #339933;">=</span> <span style="color: #000088;">$pimple</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">share</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span> <span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #b1b100;">return</span> somehowGetBlogMapper<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// your ORM or other methods here</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$pimple</span><span style="color: #009900;">&#91;</span><span style="color: #0000ff;">'new_post'</span><span style="color: #009900;">&#93;</span> <span style="color: #339933;">=</span> <span style="color: #000088;">$pimple</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">protect</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span> <span style="color: #009900;">&#40;</span><span style="color: #000088;">$posted_content</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #b1b100;">return</span> <span style="color: #000000; font-weight: bold;">new</span> Post<span style="color: #009900;">&#40;</span><span style="color: #000088;">$posted_content</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// initialize the Bullet app</span>
+<span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+    <span style="color: #0000ff;">'template.cfg'</span> <span style="color: #339933;">=&gt;</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'path'</span> <span style="color: #339933;">=&gt;</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/templates'</span><span style="color: #009900;">&#41;</span>
+<span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// initialize a Bullet request and add the container as a custom property</span>
+<span style="color: #000088;">$request</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\Request<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">pimple</span> <span style="color: #339933;">=</span> <span style="color: #000088;">$pimple</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// set up the Bullet 'blog' route</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'blog'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+&nbsp;
+    <span style="color: #666666; font-style: italic;">// use Pimple to load the blog mapper</span>
+    <span style="color: #000088;">$blog</span> <span style="color: #339933;">=</span> <span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">pimple</span><span style="color: #009900;">&#91;</span><span style="color: #0000ff;">'blog'</span><span style="color: #009900;">&#93;</span><span style="color: #339933;">;</span>
+&nbsp;
+    <span style="color: #666666; font-style: italic;">// 'posts' subdirectory in 'blog' ('blog/posts')</span>
+    <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'posts'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #339933;">,</span> <span style="color: #000088;">$blog</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+&nbsp;
+        <span style="color: #666666; font-style: italic;">// handle POST by creating a new blog post, using Pimple to inject the</span>
+        <span style="color: #666666; font-style: italic;">// Post creator</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #000088;">$post</span> <span style="color: #339933;">=</span> <span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">pimple</span><span style="color: #009900;">&#91;</span><span style="color: #0000ff;">'new_post'</span><span style="color: #009900;">&#93;</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+            <span style="color: #000088;">$mapper</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">save</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$post</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+            <span style="color: #b1b100;">return</span> <span style="color: #000088;">$this</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">response</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$post</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">toJSON</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">,</span> <span style="color: #cc66cc;">201</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+    <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// run the Bullet app with the $request we configured above. the Pimple</span>
+<span style="color: #666666; font-style: italic;">// container will be available anywhere $request is available.</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span></pre>
+
 <h2>Processing JSON Payloads</h2>
 
 <p>If you do a POST or PUT request with a JSON body instead of a form url-encoded
