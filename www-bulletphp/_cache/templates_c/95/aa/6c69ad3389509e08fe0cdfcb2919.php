@@ -130,14 +130,18 @@ class __TwigTemplate_95aa6c69ad3389509e08fe0cdfcb2919 extends Twig_Template
         // line 61
         echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/response", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Response"), "method"), "html", null, true);
         echo "
+                    <li>";
+        // line 62
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/dependency-injection", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Dependency Injection"), "method"), "html", null, true);
+        echo "
                   </ul>
                 </l>
                 <li>";
-        // line 64
+        // line 65
         echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "examples-users", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Examples & Uses"), "method"), "html", null, true);
         echo "
                 <li>";
-        // line 65
+        // line 66
         echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "blog", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Blog"), "method"), "html", null, true);
         echo "</li>
               </ul>
@@ -151,9 +155,9 @@ class __TwigTemplate_95aa6c69ad3389509e08fe0cdfcb2919 extends Twig_Template
           <div id=\"region_foot\" class=\"span9\">
             <div class=\"inside\">
               ";
-        // line 76
+        // line 77
         $this->displayBlock('footer', $context, $blocks);
-        // line 80
+        // line 81
         echo "            </div>
           </div>
           <div class=\"span3 right\">
@@ -184,7 +188,7 @@ class __TwigTemplate_95aa6c69ad3389509e08fe0cdfcb2919 extends Twig_Template
     </script>
 
 \t";
-        // line 109
+        // line 110
         echo $this->getAttribute((isset($context["piecrust"]) ? $context["piecrust"] : null), "debug_info");
         echo "
 </body>
@@ -215,10 +219,10 @@ class __TwigTemplate_95aa6c69ad3389509e08fe0cdfcb2919 extends Twig_Template
             ";
     }
 
-    // line 76
+    // line 77
     public function block_footer($context, array $blocks = array())
     {
-        // line 77
+        // line 78
         echo "                <p>Using Bullet in an awesome project? <a href=\"http://twitter.com/vlucas\">Let me know</a>!</p>
                 <p>BulletPHP &copy; 2012 <a href=\"http://www.vancelucas.com\">Vance Lucas</a> from <a href=\"http://brightbit.com\">Brightbit</a>. All rights reserved. Open source under the <a href=\"http://www.opensource.org/licenses/bsd-license.php\">BSD license</a>.</p>
               ";
@@ -279,6 +283,6 @@ class __TwigTemplate_95aa6c69ad3389509e08fe0cdfcb2919 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  251 => 6,  243 => 4,  241 => 3,  239 => 2,  226 => 1,  220 => 77,  217 => 76,  210 => 40,  207 => 39,  197 => 29,  194 => 28,  186 => 109,  155 => 80,  153 => 76,  139 => 65,  135 => 64,  129 => 61,  125 => 60,  121 => 59,  117 => 58,  113 => 57,  109 => 56,  105 => 55,  101 => 54,  97 => 53,  92 => 51,  88 => 50,  78 => 42,  76 => 39,  67 => 32,  65 => 28,  53 => 19,  48 => 18,  20 => 10,  50 => 9,  47 => 8,  41 => 17,  35 => 16,  29 => 4,  26 => 14,  17 => 1,);
+        return array (  255 => 6,  247 => 4,  245 => 3,  243 => 2,  230 => 1,  224 => 78,  221 => 77,  214 => 40,  211 => 39,  201 => 29,  198 => 28,  190 => 110,  159 => 81,  157 => 77,  143 => 66,  139 => 65,  133 => 62,  129 => 61,  125 => 60,  121 => 59,  117 => 58,  113 => 57,  109 => 56,  105 => 55,  101 => 54,  97 => 53,  92 => 51,  88 => 50,  78 => 42,  76 => 39,  67 => 32,  65 => 28,  53 => 19,  48 => 18,  20 => 10,  50 => 9,  47 => 8,  41 => 17,  35 => 16,  29 => 4,  26 => 14,  17 => 1,);
     }
 }
