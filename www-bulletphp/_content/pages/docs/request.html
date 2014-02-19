@@ -100,56 +100,6 @@ $request->user_id; // Single value (checks user params first)
 $request->param('user_id'); // Single value via method
 $request->param('user_id', 0); // Value with default {% endgeshi %}
 
-### Injecting dependencies
-
-Custom properties are a powerful mechanism for passing dependencies to your
-routes, or for injecting your dependencies with a container like 
-[Pimple](http://pimple.sensiolabs.org/).
-
-{% geshi 'php' %}// create the Pimple container
-$pimple = new Pimple();
-
-// register Pimple injectors for our blog mapper and post creator
-$pimple['blog'] = $pimple->share(function () {
-    return somehowGetBlogMapper(); // your ORM or other methods here
-});
-$pimple['new_post'] = $pimple->protect(function ($posted_content) {
-    return new Post($posted_content);
-});
-
-// initialize the Bullet app
-$app = new Bullet\App(array(
-    'template.cfg' => array('path' => __DIR__ . '/templates')
-));
-
-// initialize a Bullet request and add the container as a custom property
-$request = new Bullet\Request();
-$request->pimple = $pimple
-
-// set up the Bullet 'blog' route
-$app->path('blog', function($request) use($app) {
- 
-    // use Pimple to load the blog mapper
-    $blog = $request->pimple['blog'];
- 
-    // 'posts' subdirectory in 'blog' ('blog/posts')
-    $app->path('posts', function($request) use($app, $blog) {
-
-        // handle POST by creating a new blog post, using Pimple to inject the
-        // Post creator
-        $app->post(function($request) {
-            $post = $request->pimple['new_post']($request->post());
-            $mapper->save($post);
-            return $this->response($post->toJSON(), 201);
-        });
-
-    });
-});
-
-// run the Bullet app with the $request we configured above. the Pimple
-// container will be available anywhere $request is available.
-$app->run($request);{% endgeshi %}
-
 ## Processing JSON Payloads
 
 If you do a POST or PUT request with a JSON body instead of a form url-encoded

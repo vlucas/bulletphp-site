@@ -1,0 +1,128 @@
+---
+title: Injecting dependencies
+description: Using Bullet as a dependency injection container
+---
+
+## Bullet and Dependency Injection
+
+[Dependency injection](http://www.martinfowler.com/articles/injection.html) is
+a powerful design convention that can help separate your app routing logic
+from the external services it needs (like a database connection, a user
+management system, and so on). That separation means your app will stay
+lightweight and flexible, easier to modify and better able to absorb external
+changes.
+
+Bullet itself is built on [Pimple 1.x](http://pimple.sensiolabs.org/), a simple
+dependency injection container, so injection capability is automatically
+available in your apps.
+
+## Revisiting the Bullet Blog
+
+Our blog so far uses two external services:
+
+* `somehowGetBlogMapper()`, a function that returns a database mapper for the
+  blog content and operations
+* A `Post` object that we use to create a new blog post
+
+Let's work on that first one. `somehowGetBlogMapper()` currently takes no
+arguments, which means it must be figuring out the database connection
+internally. That's not very flexible--if we wanted to change the connection
+settings, we'd have to go fiddle around in the middle of the function. If there
+are more functions that need a database connection, we'd have to go fiddle with
+all of them!
+
+Let's change our blog mapper by adding the database connection as a parameter
+(a.k.a. injecting a dependency):
+
+{% geshi 'php' %}function somehowGetBlogMapper($database_connection) {
+    // use $database_connection to get the blog mapper
+}{% endgeshi %}
+
+Great, much more flexible! Let's try using it in our Bullet app:
+
+{% geshi 'php' %}$app = new Bullet\App(array(
+    'template.cfg' => array('path' => __DIR__ . '/templates')
+));
+ 
+// 'blog' subdirectory
+$app->path('blog', function($request) use($app) {
+    $blog = somehowGetBlogMapper(/* where do we get the connection? */);
+});{% endgeshi %}
+
+Whoops, we've painted ourselves into a corner. If `somehowGetBlogMapper()`
+doesn't know how to get the database connection itself, that means the `/blog`
+route has to:
+
+{% geshi 'php' %}// 'blog' subdirectory
+$app->path('blog', function($request) use($app) {
+    $database_connection = somehowGetDatabaseConnection();
+    $blog = somehowGetBlogMapper($database_connection);
+    
+    // ... more paths and handlers here ...
+});{% endgeshi %}
+
+Wait, now the route has to know about the connection **and** the mapper? That
+doesn't seem more flexible!
+
+## Enter Pimple
+
+Lucky for us, our Bullet app doubles as a
+[dependency injection container](http://www.sitepoint.com/dependency-injection-with-pimple/).
+Let's teach Bullet how to create a database connection:
+
+{% geshi 'php' %}$app['database_connection'] = $app->share(function() {
+    return somehowGetDatabaseConnection();
+});{% endgeshi %}
+
+The `$app->share()` method means that our database connection will be created
+only once, the first time we request it. Every subsequent request will use the
+same connection.
+
+Now that Bullet knows how to create our database connection dependency, we can
+inject it into the `/blog` route:
+
+{% geshi 'php' %}// 'blog' subdirectory
+$app->path('blog', function($request) use($app) {
+    $blog = somehowGetBlogMapper($app['database_connection']);
+    
+    // ... more paths and handlers here ...
+});{% endgeshi %}
+
+That's an improvement; now the route gets the database connection right from
+`$app`. Can we keep going, and teach Bullet to create the blog mapper itself?
+
+{% geshi 'php' %}$app['database_connection'] = $app->share(function() {
+    return somehowGetDatabaseConnection();
+});
+$app['blog_mapper'] = function($app) {
+    return somehowGetBlogMapper($app['database_connection']);
+};
+
+// 'blog' subdirectory
+$app->path('blog', function($request) use($app) {
+    $blog = $app['blog_mapper'];
+    
+    // ... more paths and handlers here ...
+});{% endgeshi %}
+
+Whoa, what happened there?
+
+* We taught Bullet to create a database connection.
+* We taught Bullet to create a new blog mapper using that database connection.
+  (Notice how we didn't use `$app->share()` for the mapper? That means Bullet
+  will run `somehowGetBlogMapper()` every time the `blog_mapper` is requested.)
+* In the `/blog` route, we
+  [asked Bullet directly](https://www.youtube.com/watch?v=RlfLCWKxHJ0) for the
+  blog mapper, without worrying about the database connection.
+
+Using Bullet's built-in dependency injection container, we've managed to not
+only make our database connection available from our entire app, but also
+remove any blog mapper creation logic from our `/blog` route. If we need to
+change that logic later on, we'll only have to modify the injector; not the app
+routing.
+
+## Further Reading
+
+This page only brushes the surface of Pimple's (and Bullet's!) dependency
+injection capabilities. If you want to keep going, read
+[the documentation](https://github.com/fabpot/Pimple/blob/1.1/README.rst)!
