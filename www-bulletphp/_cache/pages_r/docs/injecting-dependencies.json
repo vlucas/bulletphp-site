@@ -1,1 +1,0 @@
-{"layout":"default","format":"markdown","template_engine":"twig","content_type":"html","title":"Injecting dependencies","blog":"blog","segments":["content"],"description":"Using Bullet as a dependency injection container"}

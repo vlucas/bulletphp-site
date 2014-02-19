@@ -132,7 +132,7 @@ class __TwigTemplate_95aa6c69ad3389509e08fe0cdfcb2919 extends Twig_Template
         echo "
                     <li>";
         // line 62
-        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/injecting-dependencies", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Injecting Dependencies"), "method"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->getAttribute($this, "nav_entry", array(0 => "docs/dependency-injection", 1 => $this->getAttribute((isset($context["page"]) ? $context["page"] : null), "slug"), 2 => "Dependency Injection"), "method"), "html", null, true);
         echo "
                   </ul>
                 </l>
