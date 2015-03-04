@@ -1,0 +1,341 @@
+
+<!doctype html>
+<html>
+<head>
+  <title>Bullet PHP Micro-Framework &mdash; Bullet PHP Micro-Framework</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="description" content="Bullet is a PHP micro-framework designed for building HTTP APIs and applications. Bullet takes a unique nested callback approach to routing that allows for more flexibility and requires less verbosity than the more typical full route+callback approach." />	<meta name="keywords" content="php microframework, functional php framework, php api framework, php hypermedia api, php rest framework, php rest api" />  <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
+</head>
+<body>
+
+    <div class="container">
+
+      <div class="row">
+        <div id="page_head">
+          <div id="region_head_logo" class="span12">
+                        <h1><a href="/">Bullet PHP Micro-Framework</a></h1>
+              <h2>The functional PHP framework built for REST APIs and Applications</h2>
+                    </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="page_main" class="span8">
+          <div class="inside">
+                            <h2>What is Bullet?</h2>
+
+<p>Bullet is a functional PHP micro-framework that helps you easily create REST
+APIs and web applications that automatically conform to the requirements of the
+<a href="http://www.ietf.org/rfc/rfc2616.txt">HTTP specification</a>. Bullet is resource
+and URI-oriented and comes pre-loaded with powerful HTTP features like
+content-negotiation and caching.</p>
+
+<h2>Requirements</h2>
+
+<ul>
+<li>PHP 5.3+ (PHP 5.4 recommended)</li>
+<li><a href="http://getcomposer.org">Composer</a> for all package management and
+autoloading (may require command-line access)</li>
+</ul>
+
+<h2>Rules</h2>
+
+<ul>
+<li>Apps are <strong>built around HTTP URIs</strong> and defined paths, not forced MVC
+(but MVC-style <a href="/docs/organization">code organization</a> is still highly recommended and
+encouraged)</li>
+<li>Bullet handles <strong>one segment of the path at a time</strong>, and executes the
+callback for that path segment before proceesing to the next segment 
+(path callbacks are executed from left to right, until the entire path
+is consumed).</li>
+<li>If the entire path cannot be consumed, a <code>404</code> error will be returned (path
+was not found).</li>
+<li>If the path can be fully consumed, and HTTP method handlers are present
+in the path but none are matched, a <code>405</code> &#8220;Method Not Allowed&#8221; response
+will be returned (if the request is a POST, but you only have a GET handler).</li>
+<li>If the path can be fully consumed, and format handlers are present in
+the path but none are matched, a <code>406</code> &#8220;Not Acceptable&#8221; response will
+be returned (if &#8216;xml&#8217; is requested, but you only have a &#8216;json&#8217; handler).</li>
+</ul>
+
+<h2>Advantages</h2>
+
+<ul>
+<li><p><strong>Super flexible routing</strong>. Because of the way the routing callbacks are
+nested, Bullet&#8217;s routing system is one of the most flexible of any other PHP
+framework or library. You can build any URL you want and respond to any HTTP
+method on that URL. Routes are not restricted to specific patterns or URL
+formats, and do not require a controller with specific method names to
+respond to specific HTTP methods. You can nest routes as many levels deep as
+you want to expose nested resources like <code>posts/42/comments/943/edit</code> with a
+level of ease and elegance not found elsewhere.</p></li>
+<li><p><strong>Reduced code duplication (DRY)</strong>. Bullet takes full advantage of its nested
+closure routing system to reduce a lot of typical code duplication required
+in most other frameworks. In a typical MVC framework controller, some code
+has to be duplicated across methods that perform CRUD operations to run ACL
+checks and load required resources like a Post object to view, edit or delete.
+With Bullet&#8217;s nested closure style, this code can be written just once in a
+path or param callback, and then you can <code>use</code> the loaded object in subsequent
+path, param, or HTTP method handlers. This eliminates the need for &#8220;before&#8221;
+hooks and filters, because you can just run the checks and load objects you
+need before you define other nested paths and <code>use</code> them when required.</p></li>
+</ul>
+
+<h2>Syntax</h2>
+
+<p>Bullet is not your typical PHP micro framework. Instead of defining a full
+path pattern or a typical URL route with a callback and parameters mapped
+to a REST method (GET, POST, etc.), Bullet parses only ONE URL segment
+at a time, and only has two methods for working with paths: <code>path</code> and
+<code>param</code>. As you may have guessed, <code>path</code> is for static path names like
+&#8220;blog&#8221; or &#8220;events&#8221; that won&#8217;t change, and <code>param</code> is for variable path
+segments that need to be captured and used, like &#8220;42&#8221; or &#8220;my-post-title&#8221;.
+You can then respond to paths using nested HTTP method callbacks that
+contain all the logic for the action you want to perform.</p>
+
+<p>This type of unique callback nesting eliminates repetitive code for
+loading records, checking authentication, and performing other setup
+work found in typical MVC frameworks or other microframeworks where each
+callback or action is in a separate scope or class method.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+    <span style="color: #0000ff;">'template.cfg'</span> <span style="color: #339933;">=&gt;</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'path'</span> <span style="color: #339933;">=&gt;</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/templates'</span><span style="color: #009900;">&#41;</span>
+<span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// 'blog' subdirectory</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'blog'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+&nbsp;
+    <span style="color: #000088;">$blog</span> <span style="color: #339933;">=</span> somehowGetBlogMapper<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Your ORM or other methods here</span>
+&nbsp;
+    <span style="color: #666666; font-style: italic;">// 'posts' subdirectory in 'blog' ('blog/posts')</span>
+    <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'posts'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #339933;">,</span> <span style="color: #000088;">$blog</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+&nbsp;
+        <span style="color: #666666; font-style: italic;">// Load posts once for handling by GET/POST/DELETE below</span>
+        <span style="color: #000088;">$posts</span> <span style="color: #339933;">=</span> <span style="color: #000088;">$blog</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">allPosts</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Your ORM or other methods here</span>
+&nbsp;
+        <span style="color: #666666; font-style: italic;">// Handle GET on this path</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">get</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$posts</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #666666; font-style: italic;">// Display all $posts</span>
+            <span style="color: #b1b100;">return</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">template</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'posts/index'</span><span style="color: #339933;">,</span> <a href="http://www.php.net/compact"><span style="color: #990000;">compact</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'posts'</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+        <span style="color: #666666; font-style: italic;">// Handle POST on this path</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$posts</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #666666; font-style: italic;">// Create new post</span>
+            <span style="color: #000088;">$post</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Post<span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+            <span style="color: #000088;">$mapper</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">save</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$post</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+            <span style="color: #b1b100;">return</span> <span style="color: #000088;">$this</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">response</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$post</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">toJSON</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">,</span> <span style="color: #cc66cc;">201</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+        <span style="color: #666666; font-style: italic;">// Handle DELETE on this path</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">delete</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$posts</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #666666; font-style: italic;">// Delete entire posts collection</span>
+            <span style="color: #000088;">$posts</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">deleteAll</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+            <span style="color: #b1b100;">return</span> <span style="color: #cc66cc;">200</span><span style="color: #339933;">;</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+    <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Run the app and echo the response</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">&quot;GET&quot;</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">&quot;blog/posts&quot;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<h3>Capturing Path Parameters</h3>
+
+<p>Perhaps the most compelling use of URL routing is to capture path
+segments and use them as parameters to fetch items from a database, like
+<code>/posts/42</code> and <code>/posts/42/edit</code>. Bullet has a special <code>param</code> handler
+for this that takes two arguments: a <code>test</code> callback that validates the
+parameter type for use, and and a <code>Closure</code> callback. If the <code>test</code>
+callback returns boolean <code>false</code>, the closure is never executed, and the
+next path segment or param is tested. If it returns boolean <code>true</code>, the
+captured parameter is passed to the Closure as the second argument.</p>
+
+<p>Just like regular paths, HTTP method handlers can be nested inside param
+callbacks, as well as other paths, more parameters, etc.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+    <span style="color: #0000ff;">'template.cfg'</span> <span style="color: #339933;">=&gt;</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'path'</span> <span style="color: #339933;">=&gt;</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/templates'</span><span style="color: #009900;">&#41;</span>
+<span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'posts'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #666666; font-style: italic;">// Integer path segment, like 'posts/42'</span>
+    <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'int'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">,</span> <span style="color: #000088;">$id</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">get</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$id</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #666666; font-style: italic;">// View post</span>
+            <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">'view_'</span> <span style="color: #339933;">.</span> <span style="color: #000088;">$id</span><span style="color: #339933;">;</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">put</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$id</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #666666; font-style: italic;">// Update resource</span>
+            <span style="color: #000088;">$post</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">data</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">post</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+            <span style="color: #000088;">$post</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">save</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+            <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">'update_'</span> <span style="color: #339933;">.</span> <span style="color: #000088;">$id</span><span style="color: #339933;">;</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">delete</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$id</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #666666; font-style: italic;">// Delete resource</span>
+            <span style="color: #000088;">$post</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">delete</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+            <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">'delete_'</span> <span style="color: #339933;">.</span> <span style="color: #000088;">$id</span><span style="color: #339933;">;</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+    <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+    <span style="color: #666666; font-style: italic;">// URL slug (alphanumeric with dashes and underscores)</span>
+    <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'slug'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">,</span> <span style="color: #000088;">$slug</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+        <span style="color: #b1b100;">return</span> <span style="color: #000088;">$slug</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'my-post-title'</span>
+    <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Results of above code</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'GET'</span><span style="color: #339933;">,</span>   <span style="color: #0000ff;">'/posts/42'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'view_42'</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'PUT'</span><span style="color: #339933;">,</span>   <span style="color: #0000ff;">'/posts/42'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'update_42'</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'DELETE'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'/posts/42'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'delete_42'</span>
+&nbsp;
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'DELETE'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'/posts/my-post-title'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// 'my-post-title'</span>
+&nbsp;</pre>
+
+<h2>Returning JSON (Useful for PHP JSON APIs)</h2>
+
+<p>Bullet has built-in support for returning JSON responses. If you return
+an array from a route handler (callback), Bullet will assume the
+response is JSON and automatically <code>json_encode</code> the array and return the
+HTTP response with the appropriate <code>Content-Type: application/json</code> header.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'/'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">get</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+        <span style="color: #666666; font-style: italic;">// Links to available resources for the API</span>
+        <span style="color: #000088;">$data</span> <span style="color: #339933;">=</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+            <span style="color: #0000ff;">'_links'</span> <span style="color: #339933;">=&gt;</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+                <span style="color: #0000ff;">'restaurants'</span> <span style="color: #339933;">=&gt;</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+                    <span style="color: #0000ff;">'title'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #0000ff;">'Restaurants'</span><span style="color: #339933;">,</span>
+                    <span style="color: #0000ff;">'href'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">url</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'restaurants'</span><span style="color: #009900;">&#41;</span>
+                <span style="color: #009900;">&#41;</span><span style="color: #339933;">,</span>
+                <span style="color: #0000ff;">'events'</span> <span style="color: #339933;">=&gt;</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+                    <span style="color: #0000ff;">'title'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #0000ff;">'Events'</span><span style="color: #339933;">,</span>
+                    <span style="color: #0000ff;">'href'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">url</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'events'</span><span style="color: #009900;">&#41;</span>
+                <span style="color: #009900;">&#41;</span>
+            <span style="color: #009900;">&#41;</span>
+        <span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+        <span style="color: #666666; font-style: italic;">// Format responders</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">format</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'json'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #339933;">,</span> <span style="color: #000088;">$data</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #b1b100;">return</span> <span style="color: #000088;">$data</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// Auto json_encode on arrays for JSON requests</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">format</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'xml'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #339933;">,</span> <span style="color: #000088;">$data</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #b1b100;">return</span> custom_function_convert_array_to_xml<span style="color: #009900;">&#40;</span><span style="color: #000088;">$data</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+        <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">format</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'html'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #339933;">,</span> <span style="color: #000088;">$data</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+            <span style="color: #b1b100;">return</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">template</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'index'</span><span style="color: #339933;">,</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'links'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #000088;">$data</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+        <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+    <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<h3>HTTP Response Bullet Sends:</h3>
+
+<pre><code>Content-Type:application/json
+
+{"_links":{"restaurants":{"title":"Restaurants","href":"http:\/\/yourdomain.local\/restaurants"},"events":{"title":"Events","href":"http:\/\/yourdomain.local\/events"}}}
+</code></pre>
+
+<h2>Nested Requests (HMVC style code re-use)</h2>
+
+<p>Since you explicitly <code>return</code> values from Bullet routes instead of
+sending output directly, nested/sub requests are straightforward and easy.
+All route handlers will return <code>Bullet\Response</code> instances (even if they
+return a raw string or other data type, they are wrapped in a response
+object by the <code>run</code> method), and they can be composed to form a single
+HTTP response.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'foo'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">&quot;foo&quot;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'bar'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #000088;">$foo</span> <span style="color: #339933;">=</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'GET'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'foo'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// $foo is now a `Bullet\Response` instance</span>
+    <span style="color: #b1b100;">return</span> <span style="color: #000088;">$foo</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">content</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">&quot;bar&quot;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'GET'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'bar'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// echos 'foobar' with a 200 OK status</span>
+&nbsp;</pre>
+
+<h2>Running Tests</h2>
+
+<p>To run the Bullet test suite, simply run <code>phpunit</code> in the root of the
+directory where the bullet files are in. Please make sure to add tests
+and run the test suite before submitting pull requests for any contributions.</p>
+
+<h2>Credits</h2>
+
+<p>Bullet - and specifically path-based callbacks that fully embrace HTTP
+and encourage a more resource-oriented design - is something I have been
+thinking about for a long time, and was finally moved to create it after
+seeing <a href="https://github.com/joshbuddy">@joshbuddy</a> give a presentation on <a href="http://reneerb.com/">Renee</a>
+(Ruby) at <a href="http://confoo.ca">Confoo</a> 2012 in Montréal.</p>
+
+                      </div>
+        </div>
+
+        <div id="page_side" class="span4">
+          <div class="inside">
+            <!-- content -->
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li><a class="active" href="/">Home</a></li>
+                <li><a href="/docs">Documentation</a>
+                  <ul>
+                    <li><a href="/docs/install">Installation Guide</a>
+                    <li><a href="/docs/organization">Project Organization</a>
+                    <li><a href="/docs/events">Event Handling</a>
+                    <li><a href="/docs/path-callbacks-handlers">Path Callbacks &amp; Handlers</a>
+                    <li><a href="/docs/param-callbacks">Param Callbacks</a>
+                    <li><a href="/docs/templates">Templates &amp; Views</a>
+                    <li><a href="/docs/sub-requests">Nested Sub-Requests</a>
+                    <li><a href="/docs/request">Request</a>
+                    <li><a href="/docs/response">Response</a>
+                    <li><a href="/docs/dependency-injection">Dependency Injection</a>
+                  </ul>
+                </l>
+                <li><a href="/examples-users">Examples &amp; Uses</a>
+                <li><a href="/blog">Blog</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer id="page_foot">
+        <div class="row">
+          <div id="region_foot" class="span9">
+            <div class="inside">
+                              <p>Using Bullet in an awesome project? <a href="http://twitter.com/vlucas">Let me know</a>!</p>
+                <p>BulletPHP &copy; 2012 <a href="http://www.vancelucas.com">Vance Lucas</a> from <a href="http://brightbit.com">Brightbit</a>. All rights reserved. Open source under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD license</a>.</p>
+                          </div>
+          </div>
+          <div class="span3 right">
+            <div class="inside">
+              <a href="http://brightbit.com">Built by Brightbit</a><br />
+              <small>Site powered by <a href="http://bolt80.com/piecrust/">PieCrust</a></small>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div> <!-- /container -->
+
+    <!-- Github Badge -->
+    <a href="http://github.com/vlucas/bulletphp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <!-- GA Tracker Code -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-359731-31']);
+      _gaq.push(['_setDomainName', 'bulletphp.com']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+	
+</body>
+</html>

@@ -1,0 +1,183 @@
+
+<!doctype html>
+<html>
+<head>
+  <title>Project Organization and Setup &mdash; Bullet PHP Micro-Framework</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		  <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
+</head>
+<body>
+
+    <div class="container">
+
+      <div class="row">
+        <div id="page_head">
+          <div id="region_head_logo" class="span12">
+                        <h1><a href="/">Bullet PHP Micro-Framework</a></h1>
+              <h2>The functional PHP framework built for REST APIs and Applications</h2>
+                    </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="page_main" class="span8">
+          <div class="inside">
+                            <h2>Project Organization and Setup</h2>
+
+<p>Organizing an application using a micro-framework like Bullet can sometimes be
+a challenge because there is no pre-determined or enforced structure like there
+is with larger frameworks. This gives you a lot more freedom and control, but it
+also comes with questions about where to put certain things like configuration,
+templates, models, etc. and the best way to organize larger projects to maintain
+a good separation of concerns.</p>
+
+<p>This page is offered as the recommended
+way to setup and organize an application built on Bullet so everyone on your team
+stays sane - even if that just means you.</p>
+
+<h2>Folder Organization</h2>
+
+<p>Typically, it is desireable to setup your project with a few different top-level
+directories that contain your different main content types, and a single
+web-accessible folder that contains the main index.php and all the frontend
+files.</p>
+
+<p>The ideal project setup is provided in the <a href="https://github.com/vlucas/bulletphp-skeleton">bullet example skeleton app</a>
+and looks like this:</p>
+
+<ul>
+<li><code>app</code> - All route files and anything related to this application
+
+<ul>
+<li><code>lang</code> - Language files, if using I18N</li>
+<li><code>routes</code> - Route files</li>
+<li><code>src</code> - For custom PHP classes. Anything in here is PSR-0 Autoloaded.</li>
+<li><code>templates</code> - Template files</li>
+</ul></li>
+<li><code>test</code> - Tests for this application (any type)</li>
+<li><code>vendor</code> - Composer-created folder with Bullet and dependencies</li>
+<li><code>web</code> - All web-accessible files
+
+<ul>
+<li><code>assets</code> - All your frontend asset files like images, CSS, and javascript
+
+<ul>
+<li><code>images</code> - Image files</li>
+<li><code>scripts</code> - JavaScript files</li>
+<li><code>styles</code> - CSS/Stylesheets</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h2>Route Organization</h2>
+
+<p>The easiest way to organize your project is to separate all the router handlers
+for different base routes like <code>posts</code>, <code>events</code>, and <code>comments</code> into different
+same-named files, like <code>posts.php</code>, <code>events.php</code>, and <code>comments.php</code>. This is
+very similar to the way you would separate and organize your code in a larger
+MVC framework with controller classes. If you are following the folder structure
+above, these would be placed in <code>app/routes</code>. You would then <code>require</code> these
+files in your main <code>web/index.php</code> file that serves your Bullet application.</p>
+
+<p>Your main index file would then look something like this:</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">&lt;?php</span>
+<a href="http://www.php.net/define"><span style="color: #990000;">define</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'BULLET_ROOT'</span><span style="color: #339933;">,</span> <a href="http://www.php.net/dirname"><span style="color: #990000;">dirname</span></a><span style="color: #009900;">&#40;</span>__DIR__<span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<a href="http://www.php.net/define"><span style="color: #990000;">define</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'BULLET_APP_ROOT'</span><span style="color: #339933;">,</span> BULLET_ROOT <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/app/'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<a href="http://www.php.net/define"><span style="color: #990000;">define</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'BULLET_SRC_ROOT'</span><span style="color: #339933;">,</span> BULLET_APP_ROOT <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/src/'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Composer Autoloader</span>
+<span style="color: #000088;">$loader</span> <span style="color: #339933;">=</span> <span style="color: #b1b100;">require</span> BULLET_ROOT <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/vendor/autoload.php'</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Bullet App</span>
+<span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><span style="color: #b1b100;">require</span> BULLET_APP_ROOT <span style="color: #339933;">.</span> <span style="color: #0000ff;">'config.php'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$request</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\Request<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Common include</span>
+<span style="color: #b1b100;">require</span> BULLET_APP_ROOT <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/common.php'</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Require all paths/routes</span>
+<span style="color: #000088;">$routesDir</span> <span style="color: #339933;">=</span> BULLET_APP_ROOT <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/routes/'</span><span style="color: #339933;">;</span>
+<span style="color: #b1b100;">require</span> <span style="color: #000088;">$routesDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'index.php'</span><span style="color: #339933;">;</span>
+<span style="color: #b1b100;">require</span> <span style="color: #000088;">$routesDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'events.php'</span><span style="color: #339933;">;</span>
+<span style="color: #b1b100;">require</span> <span style="color: #000088;">$routesDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'messages.php'</span><span style="color: #339933;">;</span>
+<span style="color: #b1b100;">require</span> <span style="color: #000088;">$routesDir</span> <span style="color: #339933;">.</span> <span style="color: #0000ff;">'users.php'</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Response</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<p>So just like larger frameworks that have full MVC structures and controllers,
+a good separation of concerns can be maintained and all the routes and
+corresponding logic are broken up into more digestible independent files.</p>
+
+                      </div>
+        </div>
+
+        <div id="page_side" class="span4">
+          <div class="inside">
+            <!-- content -->
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li><a href="/">Home</a></li>
+                <li><a href="/docs">Documentation</a>
+                  <ul>
+                    <li><a href="/docs/install">Installation Guide</a>
+                    <li><a class="active" href="/docs/organization">Project Organization</a>
+                    <li><a href="/docs/events">Event Handling</a>
+                    <li><a href="/docs/path-callbacks-handlers">Path Callbacks &amp; Handlers</a>
+                    <li><a href="/docs/param-callbacks">Param Callbacks</a>
+                    <li><a href="/docs/templates">Templates &amp; Views</a>
+                    <li><a href="/docs/sub-requests">Nested Sub-Requests</a>
+                    <li><a href="/docs/request">Request</a>
+                    <li><a href="/docs/response">Response</a>
+                    <li><a href="/docs/dependency-injection">Dependency Injection</a>
+                  </ul>
+                </l>
+                <li><a href="/examples-users">Examples &amp; Uses</a>
+                <li><a href="/blog">Blog</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer id="page_foot">
+        <div class="row">
+          <div id="region_foot" class="span9">
+            <div class="inside">
+                              <p>Using Bullet in an awesome project? <a href="http://twitter.com/vlucas">Let me know</a>!</p>
+                <p>BulletPHP &copy; 2012 <a href="http://www.vancelucas.com">Vance Lucas</a> from <a href="http://brightbit.com">Brightbit</a>. All rights reserved. Open source under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD license</a>.</p>
+                          </div>
+          </div>
+          <div class="span3 right">
+            <div class="inside">
+              <a href="http://brightbit.com">Built by Brightbit</a><br />
+              <small>Site powered by <a href="http://bolt80.com/piecrust/">PieCrust</a></small>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div> <!-- /container -->
+
+    <!-- Github Badge -->
+    <a href="http://github.com/vlucas/bulletphp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <!-- GA Tracker Code -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-359731-31']);
+      _gaq.push(['_setDomainName', 'bulletphp.com']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+	
+</body>
+</html>

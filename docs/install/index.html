@@ -1,0 +1,159 @@
+
+<!doctype html>
+<html>
+<head>
+  <title>Setup &amp; Installation Guide &mdash; Bullet PHP Micro-Framework</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="description" content="How to install Bullet with Composer and get started using it" />	<meta name="keywords" content="install bullet php" />  <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
+</head>
+<body>
+
+    <div class="container">
+
+      <div class="row">
+        <div id="page_head">
+          <div id="region_head_logo" class="span12">
+                        <h1><a href="/">Bullet PHP Micro-Framework</a></h1>
+              <h2>The functional PHP framework built for REST APIs and Applications</h2>
+                    </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="page_main" class="span8">
+          <div class="inside">
+                            <h2>Quick Setup</h2>
+
+<p>If you just want to clone a git repo and get going with Bullet, check out this
+<a href="https://github.com/a1ee9b/bullet-installation">bullet quickstart repository</a>
+(thanks, Jannik Zappe!). It has all the steps below completed for you in a
+package that is ready to go.</p>
+
+<h2>Installing with Composer</h2>
+
+<p><a href="http://getcomposer.org/">Composer</a> is the only supported way to install Bullet,
+and it is available on <a href="https://packagist.org/packages/vlucas/bulletphp">Packagist</a>.</p>
+
+<p>Use the composer <a href="http://getcomposer.org/doc/01-basic-usage.md">basic usage guide</a>,
+or follow the steps below:</p>
+
+<p>Setup your <code>composer.json</code> file at the root of your project</p>
+
+<pre><code>{
+    "require": {
+        "vlucas/bulletphp": "*"
+    }
+}
+</code></pre>
+
+<p>Install Composer</p>
+
+<pre><code>curl -s http://getcomposer.org/installer | php
+</code></pre>
+
+<p>Install Dependencies (will download Bullet and dependencies)</p>
+
+<pre><code>php composer.phar install
+</code></pre>
+
+<p>Create <code>index.php</code> in root directory (use the minimal example below to get started)</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">&lt;?php</span>
+<span style="color: #b1b100;">require</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/vendor/autoload.php'</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Your App</span>
+<span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'/'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">&quot;Hello World!&quot;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;
+<span style="color: #666666; font-style: italic;">// Run the app! (takes $method, $url or Bullet\Request object)</span>
+<span style="color: #b1b100;">echo</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">run</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Bullet\Request<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<p>Use an <code>.htaccess</code> file for mod_rewrite (if you&#8217;re using Apache)</p>
+
+<pre><code>&lt;IfModule mod_rewrite.c&gt;
+  RewriteEngine On
+
+  # Reroute any incoming requestst that is not an existing directory or file
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ index.php?u=$1 [L,QSA]
+&lt;/IfModule&gt;
+</code></pre>
+
+<p>Now view it in your browser.</p>
+
+<p>You should see &#8220;Hello World&#8221; in your browser if everything is working correctly.</p>
+
+                      </div>
+        </div>
+
+        <div id="page_side" class="span4">
+          <div class="inside">
+            <!-- content -->
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li><a href="/">Home</a></li>
+                <li><a href="/docs">Documentation</a>
+                  <ul>
+                    <li><a class="active" href="/docs/install">Installation Guide</a>
+                    <li><a href="/docs/organization">Project Organization</a>
+                    <li><a href="/docs/events">Event Handling</a>
+                    <li><a href="/docs/path-callbacks-handlers">Path Callbacks &amp; Handlers</a>
+                    <li><a href="/docs/param-callbacks">Param Callbacks</a>
+                    <li><a href="/docs/templates">Templates &amp; Views</a>
+                    <li><a href="/docs/sub-requests">Nested Sub-Requests</a>
+                    <li><a href="/docs/request">Request</a>
+                    <li><a href="/docs/response">Response</a>
+                    <li><a href="/docs/dependency-injection">Dependency Injection</a>
+                  </ul>
+                </l>
+                <li><a href="/examples-users">Examples &amp; Uses</a>
+                <li><a href="/blog">Blog</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer id="page_foot">
+        <div class="row">
+          <div id="region_foot" class="span9">
+            <div class="inside">
+                              <p>Using Bullet in an awesome project? <a href="http://twitter.com/vlucas">Let me know</a>!</p>
+                <p>BulletPHP &copy; 2012 <a href="http://www.vancelucas.com">Vance Lucas</a> from <a href="http://brightbit.com">Brightbit</a>. All rights reserved. Open source under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD license</a>.</p>
+                          </div>
+          </div>
+          <div class="span3 right">
+            <div class="inside">
+              <a href="http://brightbit.com">Built by Brightbit</a><br />
+              <small>Site powered by <a href="http://bolt80.com/piecrust/">PieCrust</a></small>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div> <!-- /container -->
+
+    <!-- Github Badge -->
+    <a href="http://github.com/vlucas/bulletphp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <!-- GA Tracker Code -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-359731-31']);
+      _gaq.push(['_setDomainName', 'bulletphp.com']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+	
+</body>
+</html>

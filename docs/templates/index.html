@@ -1,0 +1,233 @@
+
+<!doctype html>
+<html>
+<head>
+  <title>Views &amp; Templates &mdash; Bullet PHP Micro-Framework</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="description" content="Rendering templates and wrapping layouts with Bullet view responses" />	  <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
+</head>
+<body>
+
+    <div class="container">
+
+      <div class="row">
+        <div id="page_head">
+          <div id="region_head_logo" class="span12">
+                        <h1><a href="/">Bullet PHP Micro-Framework</a></h1>
+              <h2>The functional PHP framework built for REST APIs and Applications</h2>
+                    </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="page_main" class="span8">
+          <div class="inside">
+                            <h2>Views, Templates, and Layouts</h2>
+
+<p>Bullet comes with full PHP template support that can be used to render basic
+PHP files as templates with some nice enhancements and features bundled in.</p>
+
+<h2>Configuring Templates</h2>
+
+<p>Before Bullet can know how to render your templates, you have to let Bullet
+know where they are. If you want to use layouts, Bullet has to know where those
+are too. Template support can be configured with a simple array when creating
+the main <code>Bullet\App</code> object:</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span> <span style="color: #339933;">=</span> <span style="color: #000000; font-weight: bold;">new</span> Bullet\App<span style="color: #009900;">&#40;</span><a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+    <span style="color: #0000ff;">'template'</span> <span style="color: #339933;">=&gt;</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span>
+        <span style="color: #0000ff;">'path'</span> <span style="color: #339933;">=&gt;</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/templates/'</span><span style="color: #339933;">,</span>
+        <span style="color: #0000ff;">'path_layouts'</span> <span style="color: #339933;">=&gt;</span> __DIR__ <span style="color: #339933;">.</span> <span style="color: #0000ff;">'/templates/layout/'</span><span style="color: #339933;">,</span>
+        <span style="color: #0000ff;">'auto_layout'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #0000ff;">'application'</span>
+    <span style="color: #009900;">&#41;</span>
+<span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<p>The <code>auto_layout</code> flag, if set to a string, will automatically wrap all templates
+in a layout file of the same name if no other layout is specified. So in this
+example, a layout file would have to exist at <code>src/templates/layout/application.html.php</code>.
+If you don&#8217;t want this behavior, set the flag to boolean <code>false</code> or simply remove
+it (it is off by default).</p>
+
+<h2>Responding With Templates From Routes</h2>
+
+<p>Bullet has a built-in helper method <code>template</code> for rendering templates as HTTP
+responses from routes:</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'/'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #b1b100;">return</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">template</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'hello'</span><span style="color: #339933;">,</span> <a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'name'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #0000ff;">'World'</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<p>Note that you are using <code>return</code> instead of <code>echo</code> or <code>print</code>. This is an important
+feature of Bullet. Every route should respond with a valid response type, and
+the <code>Bullet\View\Template</code> object is actually a valid HTTP response that knows
+how to render itself on-demand. This means that you are returning a template
+object, and not a rendered chunk of content. This allows you to further
+manipulate the response and alter it in <a href="/docs/events">events</a> and nested
+<a href="/docs/sub-requests">sub-requests</a>, even after this route is matched and executed.</p>
+
+<h2>Full-Featured Example</h2>
+
+<p>Here is a more full-featured example of template usage, just so you can see all
+the options that are available to you. The <code>header</code> and <code>status</code> methods come
+from the <code>Bullet\Request</code> object that the template object extends (a template
+is literally a form of an HTTP response in Bullet).</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'/'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #b1b100;">return</span> <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">template</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'hello'</span><span style="color: #009900;">&#41;</span>
+        <span style="color: #339933;">-&gt;</span><span style="color: #004000;">set</span><span style="color: #009900;">&#40;</span><a href="http://www.php.net/array"><span style="color: #990000;">array</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'name'</span> <span style="color: #339933;">=&gt;</span> <span style="color: #0000ff;">'World'</span><span style="color: #009900;">&#41;</span><span style="color: #009900;">&#41;</span>
+        <span style="color: #339933;">-&gt;</span><span style="color: #004000;">layout</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'auth'</span><span style="color: #009900;">&#41;</span>
+        <span style="color: #339933;">-&gt;</span><span style="color: #004000;">format</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'xml'</span><span style="color: #009900;">&#41;</span> <span style="color: #666666; font-style: italic;">// makes it xml.php instead of html.php</span>
+        <span style="color: #339933;">-&gt;</span><a href="http://www.php.net/header"><span style="color: #990000;">header</span></a><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'Content-Type'</span><span style="color: #339933;">,</span> <span style="color: #0000ff;">'text/xml'</span><span style="color: #009900;">&#41;</span>
+        <span style="color: #339933;">-&gt;</span><span style="color: #004000;">status</span><span style="color: #009900;">&#40;</span><span style="color: #cc66cc;">200</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<h3>Template Contents</h3>
+
+<p>Templates will have local variables set that match the names of the variables
+that are passed to them. The <code>-&gt;set(array('name' =&gt; 'World'))</code> call will make
+the variable <code>$name</code> available inside the template.</p>
+
+<p><code>src/templates/hello.html.php</code>
+<pre class="php" style="font-family:monospace;">&lt;p&gt;Hello, <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$name</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>!&lt;/p&gt;
+&nbsp;</pre></p>
+
+<h3>Layout Contents</h3>
+
+<p>Layouts have a special variable <code>$yield</code> that holds the template content. You
+can use this variable to render the template content inside your layout
+wherever you want it to go.</p>
+
+<p><code>src/templates/layouts/auth.html.php</code>
+<pre class="php" style="font-family:monospace;">&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Hello World&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div&gt;
+    <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$yield</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&nbsp;</pre></p>
+
+<h2>Template Blocks</h2>
+
+<p>Often you will need to include assets like CSS and JavaScript files or other
+content within template files that need to be made available in layouts. Blocks
+allow you to achieve this. Content can be added to blocks using 3 different
+methods, depending on your desired result: <code>content</code>, <code>append</code>, and <code>prepend</code>.</p>
+
+<h3>Template Contents</h3>
+
+<p>Templates can define blocks with content (without an <code>echo</code> statement) that
+will be set in the block content and then later rendered in the layout or
+another template that it is nested in. Note that <code>content</code> will clear any
+previously set content, so if you want to add a stack of things to a block
+from several different templates, use <code>append</code> or <code>prepend</code> instead.</p>
+
+<p><code>src/templates/awesome.html.php</code>
+<pre class="php" style="font-family:monospace;">&lt;p&gt;I need a custom javascript on this page because it's awesome.&lt;/p&gt;
+<span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #000088;">$view</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">block</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'js'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">content</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://www.cornify.com/js/cornify.js&quot;&gt;&lt;/script&gt;
+<span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+&nbsp;</pre></p>
+
+<h3>Layout Contents</h3>
+
+<p>This layout prints the content of two blocks - one named <code>css</code> and one named
+<code>js</code>. The <code>css</code> block uses prepend with the global site styles so that the
+content defined here will appear before any other content added by templates.</p>
+
+<p><code>src/templates/layouts/application.html.php</code>
+<pre class="php" style="font-family:monospace;">&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Hello World&lt;/title&gt;
+  <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$view</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">block</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'css'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">prepend</span><span style="color: #009900;">&#40;</span><span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+    &lt;style type=&quot;text/css&quot; href=&quot;/assets/styles/site.css&quot; /&gt;
+  <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div&gt;
+    <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$yield</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+  &lt;/div&gt;
+  <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">echo</span> <span style="color: #000088;">$view</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">block</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'js'</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
+&nbsp;</pre>
+Note that the block does not have to be defined beforehand for the set content
+to be displayed. In this example, the <code>css</code> block is never used first in the
+template, but the content set here will be displayed normally without errors.</p>
+
+                      </div>
+        </div>
+
+        <div id="page_side" class="span4">
+          <div class="inside">
+            <!-- content -->
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li><a href="/">Home</a></li>
+                <li><a href="/docs">Documentation</a>
+                  <ul>
+                    <li><a href="/docs/install">Installation Guide</a>
+                    <li><a href="/docs/organization">Project Organization</a>
+                    <li><a href="/docs/events">Event Handling</a>
+                    <li><a href="/docs/path-callbacks-handlers">Path Callbacks &amp; Handlers</a>
+                    <li><a href="/docs/param-callbacks">Param Callbacks</a>
+                    <li><a class="active" href="/docs/templates">Templates &amp; Views</a>
+                    <li><a href="/docs/sub-requests">Nested Sub-Requests</a>
+                    <li><a href="/docs/request">Request</a>
+                    <li><a href="/docs/response">Response</a>
+                    <li><a href="/docs/dependency-injection">Dependency Injection</a>
+                  </ul>
+                </l>
+                <li><a href="/examples-users">Examples &amp; Uses</a>
+                <li><a href="/blog">Blog</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer id="page_foot">
+        <div class="row">
+          <div id="region_foot" class="span9">
+            <div class="inside">
+                              <p>Using Bullet in an awesome project? <a href="http://twitter.com/vlucas">Let me know</a>!</p>
+                <p>BulletPHP &copy; 2012 <a href="http://www.vancelucas.com">Vance Lucas</a> from <a href="http://brightbit.com">Brightbit</a>. All rights reserved. Open source under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD license</a>.</p>
+                          </div>
+          </div>
+          <div class="span3 right">
+            <div class="inside">
+              <a href="http://brightbit.com">Built by Brightbit</a><br />
+              <small>Site powered by <a href="http://bolt80.com/piecrust/">PieCrust</a></small>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div> <!-- /container -->
+
+    <!-- Github Badge -->
+    <a href="http://github.com/vlucas/bulletphp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <!-- GA Tracker Code -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-359731-31']);
+      _gaq.push(['_setDomainName', 'bulletphp.com']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+	
+</body>
+</html>

@@ -1,0 +1,87 @@
+/**
+ * Site Styles
+ */
+
+/* custom font */
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans|Cabin:400,700);
+
+/* Override some defaults */
+html, body {
+  font-family: 'Droid Sans', arial, sans-serif;
+  background: #222 url(../img/debut_dark.png);
+}
+body {
+  padding: 30px 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #000;
+}
+h1, h2 {
+  font-family: 'Cabin', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+}
+h2 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+h3, h4 {
+  font-family: 'Cabin', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  margin: 0!important;
+  padding: 0!important;
+}
+h3 {
+  font-size: 22px!important;
+}
+h4 {
+  font-size: 20px!important;
+}
+
+
+/* Page header tweaks */
+#page_head {
+  background-color: #fff;
+}
+  #page_head h1,
+  #page_head h1 a {
+    color: #000;
+    margin: 0;
+    padding: 5px 10px;
+    font-size: 34px;
+  }
+  #page_head h2 {
+    color: #fff;
+    margin: 0;
+    padding: 3px 20px;
+    font-size: 18px;
+    background: #ea5c2c;
+    border-bottom: 8px solid #f7c7b7;
+  }
+
+#region_head_logo {
+  padding-top: 20px;
+}
+
+.container {
+  background: #fff;
+  border: 6px solid #444;
+}
+
+/* page footer */
+#page_foot {
+  background-color: #ddd;
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #39414D;
+}
+
+.inside {
+  padding: 20px;
+}
+
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}

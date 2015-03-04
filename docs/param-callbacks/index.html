@@ -1,0 +1,156 @@
+
+<!doctype html>
+<html>
+<head>
+  <title>Param Callbacks &mdash; Bullet PHP Micro-Framework</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		  <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
+</head>
+<body>
+
+    <div class="container">
+
+      <div class="row">
+        <div id="page_head">
+          <div id="region_head_logo" class="span12">
+                        <h1><a href="/">Bullet PHP Micro-Framework</a></h1>
+              <h2>The functional PHP framework built for REST APIs and Applications</h2>
+                    </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="page_main" class="span8">
+          <div class="inside">
+                            <h2>Param Callbacks</h2>
+
+<p>Param callbacks allow you to respond to and capture path segments that match
+specific patterns or contain specific characters. Param callbacks are named 
+patterns with matcher callbacks like <code>int</code> that only matches integers.</p>
+
+<h3>Built-In Param Callback Types</h3>
+
+<p>There are several built-in callback types that cover the most common URI
+segment patterns that you will want to respond with. These types are:</p>
+
+<ul>
+<li><code>int</code> - Matches integers and numbers</li>
+<li><code>float</code> - Matches floating point numbers</li>
+<li><code>boolean</code> - Matches &#8220;1&#8221;, &#8220;true&#8221;, &#8220;on&#8221;, and &#8220;yes&#8221; (based on
+<code>FILTER_VALIDATE_BOOLEAN</code>)</li>
+<li><code>slug</code> - Matches alphanumeric URL pattern with underscores and dashes
+(<code>[a-zA-Z0-9-_]</code>)</li>
+<li><code>email</code> - Matches valid email addresses using <code>FILTER_VALIDATE_EMAIL</code></li>
+</ul>
+
+<p>This example uses the <code>slug</code> param matcher to match only URL slugs. This will
+match URIs like <code>/posts/my-post-title</code> and will output <code>Post: my-post-title</code>.</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">path</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'posts'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">param</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'slug'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$request</span><span style="color: #339933;">,</span> <span style="color: #000088;">$postId</span><span style="color: #009900;">&#41;</span> <span style="color: #000000; font-weight: bold;">use</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$app</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+        <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">&quot;Post: &quot;</span> <span style="color: #339933;">.</span> <span style="color: #000088;">$postId</span><span style="color: #339933;">;</span>
+    <span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<p><div class="alert alert-info">
+  The <code>param</code> method path callback will have a second argument that holds
+  the matched URI segment or other returned value (<code>$postId</code> in this example).
+</div></p>
+
+<h3>Register a Custom Type</h3>
+
+<p>If you need to register your own custom param type, it&#8217;s as simple as one
+method call with a custom name and a callback that runs the validation.</p>
+
+<p>This is the callback that Bullet uses for <code>int</code> paths:</p>
+
+<pre class="php" style="font-family:monospace;"><span style="color: #000088;">$app</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">registerParamType</span><span style="color: #009900;">&#40;</span><span style="color: #0000ff;">'int'</span><span style="color: #339933;">,</span> <span style="color: #000000; font-weight: bold;">function</span><span style="color: #009900;">&#40;</span><span style="color: #000088;">$value</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span>
+    <span style="color: #b1b100;">return</span> <a href="http://www.php.net/filter_var"><span style="color: #990000;">filter_var</span></a><span style="color: #009900;">&#40;</span><span style="color: #000088;">$value</span><span style="color: #339933;">,</span> FILTER_VALIDATE_INT<span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+<span style="color: #009900;">&#125;</span><span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span>
+&nbsp;</pre>
+
+<h3>Matching Rules</h3>
+
+<p>If the param callback returns boolean <code>true</code>, the attached path callback will
+be executed and the original URI segment will be passed to the attached path
+callback.</p>
+
+<p>If the param callback returns any value (anything other than boolean <code>false</code>),
+the attached callback will be executed, and the returned value will be passed
+to the path callback. This is useful if you want to modify the URI segment
+before it gets passed to the attached path callback.</p>
+
+<p>If the param callback returns boolean <code>false</code> (no match), the attached path
+callback will be skipped and never executed.</p>
+
+                      </div>
+        </div>
+
+        <div id="page_side" class="span4">
+          <div class="inside">
+            <!-- content -->
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li><a href="/">Home</a></li>
+                <li><a href="/docs">Documentation</a>
+                  <ul>
+                    <li><a href="/docs/install">Installation Guide</a>
+                    <li><a href="/docs/organization">Project Organization</a>
+                    <li><a href="/docs/events">Event Handling</a>
+                    <li><a href="/docs/path-callbacks-handlers">Path Callbacks &amp; Handlers</a>
+                    <li><a class="active" href="/docs/param-callbacks">Param Callbacks</a>
+                    <li><a href="/docs/templates">Templates &amp; Views</a>
+                    <li><a href="/docs/sub-requests">Nested Sub-Requests</a>
+                    <li><a href="/docs/request">Request</a>
+                    <li><a href="/docs/response">Response</a>
+                    <li><a href="/docs/dependency-injection">Dependency Injection</a>
+                  </ul>
+                </l>
+                <li><a href="/examples-users">Examples &amp; Uses</a>
+                <li><a href="/blog">Blog</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer id="page_foot">
+        <div class="row">
+          <div id="region_foot" class="span9">
+            <div class="inside">
+                              <p>Using Bullet in an awesome project? <a href="http://twitter.com/vlucas">Let me know</a>!</p>
+                <p>BulletPHP &copy; 2012 <a href="http://www.vancelucas.com">Vance Lucas</a> from <a href="http://brightbit.com">Brightbit</a>. All rights reserved. Open source under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD license</a>.</p>
+                          </div>
+          </div>
+          <div class="span3 right">
+            <div class="inside">
+              <a href="http://brightbit.com">Built by Brightbit</a><br />
+              <small>Site powered by <a href="http://bolt80.com/piecrust/">PieCrust</a></small>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div> <!-- /container -->
+
+    <!-- Github Badge -->
+    <a href="http://github.com/vlucas/bulletphp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <!-- GA Tracker Code -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-359731-31']);
+      _gaq.push(['_setDomainName', 'bulletphp.com']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+	
+</body>
+</html>
